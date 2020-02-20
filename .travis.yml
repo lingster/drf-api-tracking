@@ -69,7 +69,7 @@ after_success:
 
 deploy:
   provider: pypi
-  user: avelis
+  user: lingster
   password:
     secure: lHfvDnLiTBDJzps3BNYQ1+RoNdusLhy+ua2ikDurvRgM58hbzDgy/R0MhpFPW9hWMSpXQ6bx75T6BYjfl+daY2nvJ6/l4vx5NsynOnPa8v2LdwPMr2QylmZRFsklIn6iV7/KDm3JbODPUytAyg/PBrfnPRDZIdUlE1vf4s8/I79hSoT9r+Afg+i5F8ZUoRX01Gxh4xbSo9tJA3UbjyBAnx4D0/U3RA0EaSXdH+H1OaCVeaF6l8bRY3gf+RSuGusLMaSynVmhNZLRrPzRJgf0kkFMk6xhlWGPEmscRU/whv/1MSchdq4lUKsrt38Ay2RrLTgHnya4w7PFa24xNhlOfmLzM5yjVFZIkDt+A2afU8u3fAkI1gIdYAIp/ICc5L0CBCVGXddljpug3FiPXlMY9x9C7uSI5Z4vEPQncBrI/rbgGj7YbvQDjR4LzRL+FJgg7X+yklHuSgF45DN5YDtO0xnspms1z5FccPjvczusX0eUEd7aYjKD4fOEsjdxoi9oMw+jmDjEVH4xg2pRuqR6lVW4WYpfjsPUbURa2R6dIwxZ6gdIRqJN8nYnG/DrvQoqkZg53CiHdWlP0BuPTnXuCjGlsx7o/sHhErysuOSsvufUhlQTOqFofAOdU/0h8Yxa4SL3jV3fqHIDrmkbVFcTKIXwiEAEkBtMe/8qD2ooPGs=
   distributions: "sdist bdist_wheel"
