@@ -1,78 +1,127 @@
 language: python
 cache: pip
-
 sudo: false
-
 matrix:
   fast_finish: true
   include:
-    - { python: "2.7", env: DJANGO=1.11 DRF=3.5 }
-    - { python: "2.7", env: DJANGO=1.11 DRF=3.6 }
-    - { python: "2.7", env: DJANGO=1.11 DRF=3.7 }
-    - { python: "2.7", env: DJANGO=1.11 DRF=3.8 }
-    - { python: "2.7", env: DJANGO=1.11 DRF=3.9 }
-
-    - { python: "3.4", env: DJANGO=1.11 DRF=3.5 }
-    - { python: "3.4", env: DJANGO=1.11 DRF=3.6 }
-    - { python: "3.4", env: DJANGO=1.11 DRF=3.7 }
-    - { python: "3.4", env: DJANGO=1.11 DRF=3.8 }
-    - { python: "3.4", env: DJANGO=1.11 DRF=3.9 }
-    - { python: "3.4", env: DJANGO=2.0 DRF=3.7 }
-    - { python: "3.4", env: DJANGO=2.0 DRF=3.8 }
-    - { python: "3.4", env: DJANGO=2.0 DRF=3.9 }
-
-    - { python: "3.5", env: DJANGO=1.11 DRF=3.5 }
-    - { python: "3.5", env: DJANGO=1.11 DRF=3.6 }
-    - { python: "3.5", env: DJANGO=1.11 DRF=3.7 }
-    - { python: "3.5", env: DJANGO=1.11 DRF=3.8 }
-    - { python: "3.5", env: DJANGO=1.11 DRF=3.9 }
-    - { python: "3.5", env: DJANGO=2.0 DRF=3.7 }
-    - { python: "3.5", env: DJANGO=2.0 DRF=3.8 }
-    - { python: "3.5", env: DJANGO=2.0 DRF=3.9 }
-    - { python: "3.5", env: DJANGO=2.1 DRF=3.7 }
-    - { python: "3.5", env: DJANGO=2.1 DRF=3.8 }
-    - { python: "3.5", env: DJANGO=2.1 DRF=3.9 }
-
-    - { python: "3.6", env: DJANGO=1.11 DRF=3.5 }
-    - { python: "3.6", env: DJANGO=1.11 DRF=3.6 }
-    - { python: "3.6", env: DJANGO=1.11 DRF=3.7 }
-    - { python: "3.6", env: DJANGO=1.11 DRF=3.8 }
-    - { python: "3.6", env: DJANGO=1.11 DRF=3.9 }
-    - { python: "3.6", env: DJANGO=2.0 DRF=3.7 }
-    - { python: "3.6", env: DJANGO=2.0 DRF=3.8 }
-    - { python: "3.6", env: DJANGO=2.0 DRF=3.9 }
-    - { python: "3.6", env: DJANGO=2.1 DRF=3.7 }
-    - { python: "3.6", env: DJANGO=2.1 DRF=3.8 }
-    - { python: "3.6", env: DJANGO=2.1 DRF=3.9 }
-    - { python: "3.6", env: DJANGO=2.2 DRF=3.9 }
-    - { python: "3.6", env: DJANGO=3.0 DRF=3.9 }
-
-    - { python: "3.7", env: DJANGO=2.0 DRF=3.7, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=2.0 DRF=3.8, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=2.0 DRF=3.9, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=2.1 DRF=3.7, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=2.1 DRF=3.8, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=2.2 DRF=3.9, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=3.0 DRF=3.9, dist: xenial, sudo: true }
-
-    - { python: "2.7", env: TOXENV=py27-flake8 }
-
+  - python: '2.7'
+    env: DJANGO=1.11 DRF=3.5
+  - python: '2.7'
+    env: DJANGO=1.11 DRF=3.6
+  - python: '2.7'
+    env: DJANGO=1.11 DRF=3.7
+  - python: '2.7'
+    env: DJANGO=1.11 DRF=3.8
+  - python: '2.7'
+    env: DJANGO=1.11 DRF=3.9
+  - python: '3.4'
+    env: DJANGO=1.11 DRF=3.5
+  - python: '3.4'
+    env: DJANGO=1.11 DRF=3.6
+  - python: '3.4'
+    env: DJANGO=1.11 DRF=3.7
+  - python: '3.4'
+    env: DJANGO=1.11 DRF=3.8
+  - python: '3.4'
+    env: DJANGO=1.11 DRF=3.9
+  - python: '3.4'
+    env: DJANGO=2.0 DRF=3.7
+  - python: '3.4'
+    env: DJANGO=2.0 DRF=3.8
+  - python: '3.4'
+    env: DJANGO=2.0 DRF=3.9
+  - python: '3.5'
+    env: DJANGO=1.11 DRF=3.5
+  - python: '3.5'
+    env: DJANGO=1.11 DRF=3.6
+  - python: '3.5'
+    env: DJANGO=1.11 DRF=3.7
+  - python: '3.5'
+    env: DJANGO=1.11 DRF=3.8
+  - python: '3.5'
+    env: DJANGO=1.11 DRF=3.9
+  - python: '3.5'
+    env: DJANGO=2.0 DRF=3.7
+  - python: '3.5'
+    env: DJANGO=2.0 DRF=3.8
+  - python: '3.5'
+    env: DJANGO=2.0 DRF=3.9
+  - python: '3.5'
+    env: DJANGO=2.1 DRF=3.7
+  - python: '3.5'
+    env: DJANGO=2.1 DRF=3.8
+  - python: '3.5'
+    env: DJANGO=2.1 DRF=3.9
+  - python: '3.6'
+    env: DJANGO=1.11 DRF=3.5
+  - python: '3.6'
+    env: DJANGO=1.11 DRF=3.6
+  - python: '3.6'
+    env: DJANGO=1.11 DRF=3.7
+  - python: '3.6'
+    env: DJANGO=1.11 DRF=3.8
+  - python: '3.6'
+    env: DJANGO=1.11 DRF=3.9
+  - python: '3.6'
+    env: DJANGO=2.0 DRF=3.7
+  - python: '3.6'
+    env: DJANGO=2.0 DRF=3.8
+  - python: '3.6'
+    env: DJANGO=2.0 DRF=3.9
+  - python: '3.6'
+    env: DJANGO=2.1 DRF=3.7
+  - python: '3.6'
+    env: DJANGO=2.1 DRF=3.8
+  - python: '3.6'
+    env: DJANGO=2.1 DRF=3.9
+  - python: '3.6'
+    env: DJANGO=2.2 DRF=3.9
+  - python: '3.6'
+    env: DJANGO=3.0 DRF=3.9
+  - python: '3.7'
+    env: DJANGO=2.0 DRF=3.7
+    dist: xenial
+    sudo: true
+  - python: '3.7'
+    env: DJANGO=2.0 DRF=3.8
+    dist: xenial
+    sudo: true
+  - python: '3.7'
+    env: DJANGO=2.0 DRF=3.9
+    dist: xenial
+    sudo: true
+  - python: '3.7'
+    env: DJANGO=2.1 DRF=3.7
+    dist: xenial
+    sudo: true
+  - python: '3.7'
+    env: DJANGO=2.1 DRF=3.8
+    dist: xenial
+    sudo: true
+  - python: '3.7'
+    env: DJANGO=2.2 DRF=3.9
+    dist: xenial
+    sudo: true
+  - python: '3.7'
+    env: DJANGO=3.0 DRF=3.9
+    dist: xenial
+    sudo: true
+  - python: '2.7'
+    env: TOXENV=py27-flake8
 install:
-  - pip install tox-travis python-coveralls
-  - pip install -r requirements.txt
+- pip install tox-travis python-coveralls
+- pip install -r requirements.txt
 script:
-  - tox
-
+- tox
 after_success:
-  - coverage run runtests.py --nolint
-  - coveralls
-
+- coverage run runtests.py --nolint
+- coveralls
 deploy:
   provider: pypi
   user: lingster
   password:
-    secure: lHfvDnLiTBDJzps3BNYQ1+RoNdusLhy+ua2ikDurvRgM58hbzDgy/R0MhpFPW9hWMSpXQ6bx75T6BYjfl+daY2nvJ6/l4vx5NsynOnPa8v2LdwPMr2QylmZRFsklIn6iV7/KDm3JbODPUytAyg/PBrfnPRDZIdUlE1vf4s8/I79hSoT9r+Afg+i5F8ZUoRX01Gxh4xbSo9tJA3UbjyBAnx4D0/U3RA0EaSXdH+H1OaCVeaF6l8bRY3gf+RSuGusLMaSynVmhNZLRrPzRJgf0kkFMk6xhlWGPEmscRU/whv/1MSchdq4lUKsrt38Ay2RrLTgHnya4w7PFa24xNhlOfmLzM5yjVFZIkDt+A2afU8u3fAkI1gIdYAIp/ICc5L0CBCVGXddljpug3FiPXlMY9x9C7uSI5Z4vEPQncBrI/rbgGj7YbvQDjR4LzRL+FJgg7X+yklHuSgF45DN5YDtO0xnspms1z5FccPjvczusX0eUEd7aYjKD4fOEsjdxoi9oMw+jmDjEVH4xg2pRuqR6lVW4WYpfjsPUbURa2R6dIwxZ6gdIRqJN8nYnG/DrvQoqkZg53CiHdWlP0BuPTnXuCjGlsx7o/sHhErysuOSsvufUhlQTOqFofAOdU/0h8Yxa4SL3jV3fqHIDrmkbVFcTKIXwiEAEkBtMe/8qD2ooPGs=
-  distributions: "sdist bdist_wheel"
-on:
-    tags: true
-    repo: lingster/drf-api-tracking
+    secure: A+9PmUciXvH6/wQzyJPwJ34pQms6b0s8hWpnKZCzZlfD1zwTucMTUVo7cYeIf/yYITBF7xeIPPos5rFalFshExwTX2ExXTJyvNKd6bKw6t6jgBLpACBKkp3FpoILMYtutbN20uV3ICIFXIf5oPeBftZfDkzl22K/TgET0HuD5htq0qDZyJL8/lYHUU715mNK0u9QT/Imos0uSzSVxQ7P7KCW9IsWc4sA1t2WZmXAibdXl+HBqHCzzP0ul0pj8yNW6cI7SxrmHOs9pn0wy89IYu15uoQsZqEA5xq8cASbNxB1gsdSiBDpUDSIwRsLE+Aj7i3WvIjbsh8W3YQHCfco+186ha4UK42qvpePgkW7ZsEl2HnhMcRW8pXJmy+c3O2XRwG3OJ7sgSJJrHWnwI2mCqeWI+YUNGZC+hhMv4L1XG4cjwPY0yl7gaNWv6qTpIpf4fRHmku4ViRO87id9qiCYiCwq0mDJJBLj/m+frAi0I0A4C9Fii307YSlQ7C7euYllhuWdL2zuDQ2ULPz+FD8416gzZQy34G6xVmRBOUdU1jWgRg295GcvF8CFseWbN4jl2ulmsGsxvHxjZJ9N+3U1ugfAS5C/VDYRQVeth36HjnbY00xALZjNuzAn9vPTss924qjmDWJDDZ//fTqOUE8S0LPz2rcqmMCyoxjgzaY+Lg=
+  distributions: sdist bdist_wheel
+true:
+  tags: true
+  repo: lingster/drf-api-tracking
