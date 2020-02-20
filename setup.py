@@ -6,12 +6,14 @@ import sys
 from setuptools import setup
 
 
-name = 'drf-tracking'
+name = 'drf-api-tracking'
 package = 'rest_framework_tracking'
 description = 'Utils to log Django Rest Framework requests to the database'
-url = 'https://github.com/aschn/drf-tracking'
+url = 'https://github.com/lingster/drf-api-tracking'
 author = 'Anna Schneider'
 author_email = 'anna@WattTime.org'
+maintainer = 'Ling Li'
+maintainer_email = 'email@ling-li.com'
 license = 'BSD'
 
 
