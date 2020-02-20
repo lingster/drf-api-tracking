@@ -1,4 +1,4 @@
-# drf-tracking
+# drf-api-tracking
 
 [![build-status-image]][travis]
 [![pypi-version]][pypi]
@@ -7,7 +7,7 @@
 
 ## Overview
 
-drf-tracking provides a Django model and DRF view mixin that work together to log Django Rest Framework requests to the database. You'll get these attributes for every request/response cycle to a view that uses the mixin:
+drf-api-tracking provides a Django model and DRF view mixin that work together to log Django Rest Framework requests to the database. You'll get these attributes for every request/response cycle to a view that uses the mixin:
 
  Model field name | Description | Model field type
 ------------------|-------------|-----------------
@@ -44,7 +44,7 @@ Django | Python | DRF
 Install using `pip`...
 
 ```bash
-$ pip install drf-tracking
+$ pip install drf-api-tracking
 ```
 
 Register with your Django project by adding `rest_framework_tracking`
@@ -143,7 +143,7 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 
 ## Security
 
-By default drf-tracking is hiding the values of those fields `{'api', 'token', 'key', 'secret', 'password', 'signature'}`.
+By default drf-api-tracking is hiding the values of those fields `{'api', 'token', 'key', 'secret', 'password', 'signature'}`.
 The default list hast been taken from Django itself ([https://github.com/django/django/blob/stable/1.11.x/django/contrib/auth/__init__.py#L50](https://github.com/django/django/blob/stable/1.11.x/django/contrib/auth/__init__.py#L50)).
 
 You can complet this list with your own list by putting the fields you want to be hidden in the `sensitive_fields` parameter of your view.
@@ -199,3 +199,13 @@ $ mkdocs build
 [travis]: http://travis-ci.org/lingster/drf-api-tracking?branch=master
 [pypi-version]: https://img.shields.io/pypi/v/drf-api-tracking.svg
 [pypi]: https://pypi.python.org/pypi/drf-api-tracking
+
+
+# travis
+Install RVM to have a local user version of ruby/gem:
+`https://rvm.io/rvm/install`
+Then install travis like this:
+`gem install travis`
+add your secret key as per the link below:
+`https://docs.travis-ci.com/user/encryption-keys/`
+
