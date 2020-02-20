@@ -2,8 +2,8 @@
 
 [![build-status-image]][travis]
 [![pypi-version]][pypi]
-[![Requirements Status](https://requires.io/github/aschn/drf-tracking/requirements.svg?branch=master)](https://requires.io/github/aschn/drf-tracking/requirements/?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/aschn/drf-tracking/badge.svg?branch=master)](https://coveralls.io/github/aschn/drf-tracking?branch=master)
+[![Requirements Status](https://requires.io/github/lingster/drf-api-tracking/requirements.svg?branch=master)](https://requires.io/github/lingster/drf-api-tracking/requirements/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/lingster/drf-api-tracking/badge.svg?branch=master)](https://coveralls.io/github/lingster/drf-api-tracking?branch=master)
 
 ## Overview
 
@@ -195,7 +195,7 @@ $ mkdocs build
 ```
 
 
-[build-status-image]: https://secure.travis-ci.org/aschn/drf-tracking.png?branch=master
-[travis]: http://travis-ci.org/aschn/drf-tracking?branch=master
-[pypi-version]: https://img.shields.io/pypi/v/drf-tracking.svg
-[pypi]: https://pypi.python.org/pypi/drf-tracking
+[build-status-image]: https://secure.travis-ci.org/lingster/drf-api-tracking.png?branch=master
+[travis]: http://travis-ci.org/lingster/drf-api-tracking?branch=master
+[pypi-version]: https://img.shields.io/pypi/v/drf-api-tracking.svg
+[pypi]: https://pypi.python.org/pypi/drf-api-tracking
