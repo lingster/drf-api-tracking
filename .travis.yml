@@ -44,13 +44,16 @@ matrix:
     - { python: "3.6", env: DJANGO=2.1 DRF=3.7 }
     - { python: "3.6", env: DJANGO=2.1 DRF=3.8 }
     - { python: "3.6", env: DJANGO=2.1 DRF=3.9 }
+    - { python: "3.6", env: DJANGO=2.2 DRF=3.9 }
+    - { python: "3.6", env: DJANGO=3.0 DRF=3.9 }
 
     - { python: "3.7", env: DJANGO=2.0 DRF=3.7, dist: xenial, sudo: true }
     - { python: "3.7", env: DJANGO=2.0 DRF=3.8, dist: xenial, sudo: true }
     - { python: "3.7", env: DJANGO=2.0 DRF=3.9, dist: xenial, sudo: true }
     - { python: "3.7", env: DJANGO=2.1 DRF=3.7, dist: xenial, sudo: true }
     - { python: "3.7", env: DJANGO=2.1 DRF=3.8, dist: xenial, sudo: true }
-    - { python: "3.7", env: DJANGO=2.1 DRF=3.9, dist: xenial, sudo: true }
+    - { python: "3.7", env: DJANGO=2.2 DRF=3.9, dist: xenial, sudo: true }
+    - { python: "3.7", env: DJANGO=3.0 DRF=3.9, dist: xenial, sudo: true }
 
     - { python: "2.7", env: TOXENV=py27-flake8 }
 
@@ -72,4 +75,4 @@ deploy:
   distributions: "sdist bdist_wheel"
 on:
     tags: true
-    repo: aschn/drf-tracking
+    repo: lingster/drf-api-tracking
