@@ -36,9 +36,9 @@ Django | Python | DRF
 -------|--------|----
 1.11 | 2.7, 3.5, 3.6 | 3.5, 3.6, 3.7, 3.8, 3.9
 2.0 | 3.5, 3.6, 3.7 | 3.7, 3.8, 3.9
-2.1 | 3.5, 3.6, 3.7 | 3.7, 3.8, 3.9
-2.2 | 3.5, 3.6, 3.7 | 3.7, 3.8, 3.9
-3.0 | 3.5, 3.6, 3.7 | 3.7, 3.8, 3.9
+2.1 | 3.5, 3.6, 3.7, 3.8 | 3.7, 3.8, 3.9
+2.2 | 3.5, 3.6, 3.7, 3.8 | 3.7, 3.8, 3.9
+3.0 | 3.5, 3.6, 3.7, 3.8 | 3.7, 3.8, 3.9
 
 ## Installation
 
@@ -211,4 +211,12 @@ Then install travis like this:
 `gem install travis`
 add your secret key as per the link below:
 `https://docs.travis-ci.com/user/encryption-keys/`
+
+pyenv
+---
+using pyenv you can install multiple versions of python so that tox can run tests against all installed versions of python
+``` bash
+pyenv global 3.6.8 3.7.7 3.8.2
+```
+ensure that before running tox you don't have a virtualenv created and tox has been installed globally or via pipx
 

@@ -107,8 +107,8 @@ class BaseLoggingMixin(object):
         ipaddr = request.META.get("HTTP_X_FORWARDED_FOR", None)
         if ipaddr:
             # X_FORWARDED_FOR returns client1, proxy1, proxy2,...
-            return ipaddr.split(",")[0].strip()
-        return request.META.get("REMOTE_ADDR", "")
+            return ipaddr.split(",")[0].strip().split(':')[0]
+        return request.META.get("REMOTE_ADDR", "").split(':')[0]
 
     def _get_view_name(self, request):
         """Get view name."""
