@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+tox-pyenv = "*"
 
 [packages]
 djangorestframework = ">=3.5"
@@ -20,4 +21,4 @@ Django = ">=1.11.28"
 six = ">=1.13.0"
 
 [requires]
-python_version = "3.7"
+python_version = ">=3.7"
