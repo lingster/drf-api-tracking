@@ -99,7 +99,7 @@ matrix:
     dist: xenial
     sudo: true
   - python: '3.8'
-    env: TOXENV=py27-flake8
+    env: TOXENV=py38-flake8
   - python: '3.8'
     env: DJANGO=2.0 DRF=3.7
     dist: xenial
