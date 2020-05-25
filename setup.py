@@ -4,11 +4,13 @@ import re
 import os
 import sys
 from setuptools import setup
-
+from os import path
 
 name = 'drf-api-tracking'
 package = 'rest_framework_tracking'
+summary = 'Utils to log Django Rest Framework requests to the database'
 description = 'Utils to log Django Rest Framework requests to the database'
+description_content_type = 'text/markdown; charset=UTF-8'
 url = 'https://github.com/lingster/drf-api-tracking'
 author = 'Anna Schneider'
 author_email = 'anna@WattTime.org'
@@ -65,13 +67,18 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     sys.exit()
 
-
+# read contents of readme:
+this_dir = path.abspath(path.dirname(__file__))
+with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 setup(
     name=name,
     version=version,
     url=url,
     license=license,
     description=description,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author=author,
     author_email=author_email,
     packages=get_packages(package),
