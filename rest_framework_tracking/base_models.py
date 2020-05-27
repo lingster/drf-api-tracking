@@ -32,7 +32,7 @@ class BaseAPIRequestLog(models.Model):
         db_index=True,
     )
     view_method = models.CharField(
-        max_length=getattr(settings, 'DRF_TRACKING_VIEW_METHOD_LENGTH', 27),
+        max_length=getattr(settings, 'DRF_TRACKING_VIEW_METHOD_LENGTH', 200),
         null=True,
         blank=True,
         db_index=True,
