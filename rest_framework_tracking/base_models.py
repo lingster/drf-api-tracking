@@ -1,11 +1,9 @@
 from django.db import models
 from django.conf import settings
-from six import python_2_unicode_compatible
 
 from .managers import PrefetchUserManager
 
 
-@python_2_unicode_compatible
 class BaseAPIRequestLog(models.Model):
     """ Logs Django rest framework API requests """
     user = models.ForeignKey(
@@ -23,13 +21,14 @@ class BaseAPIRequestLog(models.Model):
     response_ms = models.PositiveIntegerField(default=0)
     path = models.CharField(
         max_length=getattr(settings, 'DRF_TRACKING_PATH_LENGTH', 200),
-        db_index=True,
+        db_index=True, help_text='url path',
     )
     view = models.CharField(
         max_length=getattr(settings, 'DRF_TRACKING_VIEW_LENGTH', 200),
         null=True,
         blank=True,
         db_index=True,
+        help_text='method called by this endpoint',
     )
     view_method = models.CharField(
         max_length=getattr(settings, 'DRF_TRACKING_VIEW_METHOD_LENGTH', 200),

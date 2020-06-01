@@ -156,6 +156,10 @@ class LoggingView(LoggingMixin, generics.CreateModelMixin, generics.GenericAPIVi
 
 By default drf-tracking allows API request log entries to be modified from Django admin. This can present a data integrity issue in production environments. In order to change this behavior, you can set `DRF_TRACKING_ADMIN_LOG_READONLY` to `True` in your `settings.py` file.
 
+## Development
+In the folder there is a sample drf project: `drf_api_sample` if changes are made to this packages models, use this project
+to help generate new migrations, which should be checked in. 
+
 ## Testing
 
 Install testing requirements.
