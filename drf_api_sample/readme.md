@@ -12,22 +12,18 @@ A simple playground for messing around with REST APIs
 6) create admin account
 `python manage.py createsuperuser`
 
-7) run: 
-`python manage.py runserver localhost:8000`
+7) drf_yasg / swagger ui has been included as part of this sample, so you can execute REST api calls via: 
+`python manage.py runserver localhost:8000/swagger`
 
-Tasks:
+8) check in admin view that the log has been added after call to your REST api:
+`http://localhost:8000/admin/rest_framework_tracking/`
+
+Development:
 ------
 To install drf_api_tracking for development use:
+
 `pipenv install -e ../../drf_api_tracking`
 
-And include a local version for drf_api_tracking: 
-(for reference see: https://docs.djangoproject.com/en/3.0/intro/reusable-apps/)
+Note this is already configured in the Pipfile
 
-`python -m pip install --user drf-api-tracking/dist/drf-api-tracking-1.6.0.tar.gz`
-
-To uninstall the package: 
-
-`python -m pip uninstall drf-api-tracking`
-
-Then following the instructions on how to add drf-api-tracking into this project
 
