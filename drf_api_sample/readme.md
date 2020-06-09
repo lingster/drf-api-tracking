@@ -1,6 +1,6 @@
 DRF API Sample
 ==============
-A simple playground for messing around with REST APIs 
+A simple playground for messing around with REST APIs and for testing drf-api-tracking
 
 1) create venv: `python3 -m venv ~/venv/drf_sample`
 2) enable venv: `source ~/venv/drf_sample/bin/activate`
@@ -22,8 +22,12 @@ Development:
 ------
 To install drf_api_tracking for development use:
 
-`pipenv install -e ../../drf_api_tracking`
+`pipenv install -e ../../drf-api-tracking`
 
 Note this is already configured in the Pipfile
 
+
+If you then make changes to the models in the drf-api-tracking library, then make sure you run:
+`python manage.py makemigrations`
+and ensure that the migrations file(s) are checked into git and PR made.
 
