@@ -1,4 +1,5 @@
 import ast
+import ipaddress
 import logging
 import traceback
 
@@ -105,10 +106,24 @@ class BaseLoggingMixin(object):
     def _get_ip_address(self, request):
         """Get the remote ip address the request was generated from. """
         ipaddr = request.META.get("HTTP_X_FORWARDED_FOR", None)
-        if ipaddr:
-            # X_FORWARDED_FOR returns client1, proxy1, proxy2,...
-            return ipaddr.split(",")[0].strip().split(':')[0]
-        return request.META.get("REMOTE_ADDR", "").split(':')[0]
+        if not ipaddr:
+            ipaddr = request.META.get("REMOTE_ADDR", "")
+
+        # Account for IPv4 and IPv6 addresses, each possibly with port appended. Possibilities are:
+        # <ipv4 address>
+        # <ipv6 address>
+        # <ipv4 address>:port
+        # [<ipv6 address>]:port
+        # Note that ipv6 addresses are colon separated hex numbers
+        possibles = (ipaddr.lstrip('[').split(']')[0], ipaddr.split(':')[0])
+
+        for addr in possibles:
+            try:
+                return str(ipaddress.ip_address(addr))
+            except ValueError:
+                pass
+
+        return ipaddr
 
     def _get_view_name(self, request):
         """Get view name."""
