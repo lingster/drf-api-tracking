@@ -9,6 +9,7 @@
 
 drf-api-tracking provides a Django model and DRF view mixin that work together to log Django Rest Framework requests to the database. You'll get these attributes for every request/response cycle to a view that uses the mixin:
 
+
  Model field name | Description | Model field type
 ------------------|-------------|-----------------
 `user` | User if authenticated, None if not | Foreign Key
@@ -44,7 +45,7 @@ Django | Python | DRF
 
 Install using `pip`...
 
-```bash
+``` bash
 $ pip install drf-api-tracking
 ```
 
@@ -52,7 +53,7 @@ Register with your Django project by adding `rest_framework_tracking`
 to the `INSTALLED_APPS` list in your project's `settings.py` file.
 Then run the migrations for the `APIRequestLog` model:
 
-```bash
+``` bash
 $ python manage.py migrate
 ```
 
@@ -62,7 +63,7 @@ Add the `rest_framework_tracking.mixins.LoggingMixin` to any DRF view
 to create an instance of `APIRequestLog` every time the view is called.
 
 For instance:
-```python
+``` python
 # views.py
 from rest_framework import generics
 from rest_framework.response import Response
@@ -74,7 +75,8 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 ```
 
 For performance enhancement, explicitly choose methods to be logged using `logging_methods` attribute:
-```python
+
+``` python
 class LoggingView(LoggingMixin, generics.CreateModelMixin, generics.GenericAPIView):
     logging_methods = ['POST', 'PUT']
     model = ...
@@ -82,7 +84,8 @@ class LoggingView(LoggingMixin, generics.CreateModelMixin, generics.GenericAPIVi
 
 Moreover, you could define your own rules by overriding `should_log` method.
 If `should_log` evaluates to True a log is created.
-```python
+
+``` python
 class LoggingView(LoggingMixin, generics.GenericAPIView):
     def should_log(self, request, response):
         """Log only errors"""
@@ -91,7 +94,8 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 
 At the example above, `logging_methods` attribute will be ignored. If you want to provide some extra rules
 on top of the http method filtering you should rewrite the `should_log` method.
-```python
+
+``` python
 class LoggingView(LoggingMixin, generics.GenericAPIView):
     def should_log(self, request, response):
         """Log only errors with respect on `logging_methods` attributes"""
@@ -102,7 +106,7 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 ```
 
  A bit simpler.
- ```python
+``` python
 class LoggingView(LoggingMixin, generics.GenericAPIView):
     def should_log(self, request, response):
         """Log only errors with respect on `logging_methods` attributes"""
@@ -113,7 +117,7 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 
 Finally, you can also apply your customizations by overriding `handle_log` method.
 By default, all requests that satisfy `should_log` method are saved on the database.
-```python
+``` python
 class LoggingView(LoggingMixin, generics.GenericAPIView):
     def handle_log(self):
         # Do some stuff before saving.
@@ -123,7 +127,7 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 
 
 Though, you could define your own handling. For example save on an in-memory data structure store, remote logging system etc.
-```python
+``` python
 class LoggingView(LoggingMixin, generics.GenericAPIView):
 
     def handle_log(self):
@@ -131,7 +135,7 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 ```
 
 Or you could omit save a request to the database. For example,
-```python
+``` python
 class LoggingView(LoggingMixin, generics.GenericAPIView):
     def handle_log(self):
         """
@@ -147,9 +151,9 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
 By default drf-api-tracking is hiding the values of those fields `{'api', 'token', 'key', 'secret', 'password', 'signature'}`.
 The default list hast been taken from Django itself ([https://github.com/django/django/blob/stable/1.11.x/django/contrib/auth/__init__.py#L50](https://github.com/django/django/blob/stable/1.11.x/django/contrib/auth/__init__.py#L50)).
 
-You can complet this list with your own list by putting the fields you want to be hidden in the `sensitive_fields` parameter of your view.
+You can complete this list with your own list by putting the fields you want to be hidden in the `sensitive_fields` parameter of your view.
 
-```python
+``` python
 class LoggingView(LoggingMixin, generics.CreateModelMixin, generics.GenericAPIView):
     sensitive_fields = {'my_secret_key', 'my_secret_recipe'}
 ```
@@ -164,19 +168,19 @@ to help generate new migrations, which should be checked in.
 
 Install testing requirements.
 
-```bash
+``` bash
 $ pip install -r requirements.txt
 ```
 
 Run with runtests.
 
-```bash
+``` bash
 $ ./runtests.py
 ```
 
 You can also use the excellent [tox](http://tox.readthedocs.org/en/latest/) testing tool to run the tests against all supported versions of Python and Django. Install tox globally, and then simply run:
 
-```bash
+``` bash
 $ tox
 ```
 
@@ -184,20 +188,20 @@ $ tox
 
 To build the documentation, you'll need to install `mkdocs`.
 
-```bash
+``` bash
 $ pip install mkdocs
 ```
 
 To preview the documentation:
 
-```bash
+``` bash
 $ mkdocs serve
 Running at: http://127.0.0.1:8000/
 ```
 
 To build the documentation:
 
-```bash
+``` bash
 $ mkdocs build
 ```
 
