@@ -106,7 +106,9 @@ class BaseLoggingMixin(object):
     def _get_ip_address(self, request):
         """Get the remote ip address the request was generated from. """
         ipaddr = request.META.get("HTTP_X_FORWARDED_FOR", None)
-        if not ipaddr:
+        if ipaddr:
+            ipaddr = ipaddr.split(",")[0]
+        else:
             ipaddr = request.META.get("REMOTE_ADDR", "")
 
         # Account for IPv4 and IPv6 addresses, each possibly with port appended. Possibilities are:

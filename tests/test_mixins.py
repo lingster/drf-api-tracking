@@ -90,6 +90,14 @@ class TestLoggingMixin(APITestCase):
         log = APIRequestLog.objects.first()
         self.assertEqual(log.remote_addr, '127.0.0.8')
 
+    def test_log_ip_xforwarded_list(self):
+        request = APIRequestFactory().get('/logging')
+        request.META['HTTP_X_FORWARDED_FOR'] = '127.0.0.8, 128.1.1.9'
+
+        MockLoggingView.as_view()(request).render()
+        log = APIRequestLog.objects.first()
+        self.assertEqual(log.remote_addr, '127.0.0.8')
+
     def test_log_host(self):
         self.client.get('/logging')
         log = APIRequestLog.objects.first()
