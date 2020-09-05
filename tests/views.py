@@ -29,11 +29,9 @@ class MockLoggingView(LoggingMixin, APIView):
 class MockLoggingExceptionView(LoggingMixin, APIView):
     def get(self, request):
         raise Exception('mock exception')
-        return Response('with logging')
 
     def post(self, request):
         raise Exception('mock exception')
-        return Response('with logging')
 
 
 class MockSlowLoggingView(LoggingMixin, APIView):
