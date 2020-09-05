@@ -10,7 +10,7 @@ djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
 drf-yasg = "*"
-drf-api-tracking = {editable = true, path = "./../../drf-api-tracking"}
+drf-api-tracking = {editable = true,path = "./../../drf-api-tracking"}
 
 [requires]
 python_version = "3.7"
