@@ -17,7 +17,7 @@ flaky = "*"
 flake8 = "*"
 tox = "*"
 mock = "*"
-Django = ">=1.11.28"
+django = ">=3.0.7"
 six = ">=1.13.0"
 
 [requires]
