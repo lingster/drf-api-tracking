@@ -23,8 +23,7 @@ class BaseLoggingMixin(object):
         super(BaseLoggingMixin, self).__init__(*args, **kwargs)
 
     def initial(self, request, *args, **kwargs):
-        self.log = {}
-        self.log['requested_at'] = now()
+        self.log = {'requested_at': now()}
         self.log['data'] = self._clean_data(request.body)
 
         super(BaseLoggingMixin, self).initial(request, *args, **kwargs)
@@ -52,12 +51,15 @@ class BaseLoggingMixin(object):
         should_log = self._should_log if hasattr(self, '_should_log') else self.should_log
 
         if should_log(request, response):
-            if connection.settings_dict.get('ATOMIC_REQUESTS'):
-                if getattr(response, 'exception', None) and connection.in_atomic_block:
-                    # response with exception (HTTP status like: 401, 404, etc)
-                    # pointwise disable atomic block for handle log (TransactionManagementError)
-                    connection.set_rollback(True)
-                    connection.set_rollback(False)
+            if (
+                connection.settings_dict.get('ATOMIC_REQUESTS')
+                and getattr(response, 'exception', None)
+                and connection.in_atomic_block
+            ):
+                # response with exception (HTTP status like: 401, 404, etc)
+                # pointwise disable atomic block for handle log (TransactionManagementError)
+                connection.set_rollback(True)
+                connection.set_rollback(False)
             if response.streaming:
                 rendered_content = None
             elif hasattr(response, 'rendered_content'):
@@ -76,7 +78,7 @@ class BaseLoggingMixin(object):
                     'query_params': self._clean_data(request.query_params.dict()),
                     'user': self._get_user(request),
                     'username_persistent':
-                        self._get_user(request).username if self._get_user(request) else 'Anonymous',
+                        self._get_user(request).get_username() if self._get_user(request) else 'Anonymous',
                     'response_ms': self._get_response_ms(),
                     'response': self._clean_data(rendered_content),
                     'status_code': response.status_code,
@@ -130,8 +132,12 @@ class BaseLoggingMixin(object):
         method = request.method.lower()
         try:
             attributes = getattr(self, method)
-            view_name = type(attributes.__self__).__module__ + '.' + type(attributes.__self__).__name__
-            return view_name
+            return (
+                type(attributes.__self__).__module__
+                + '.'
+                + type(attributes.__self__).__name__
+            )
+
         except AttributeError:
             return None
 

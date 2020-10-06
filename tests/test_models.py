@@ -90,14 +90,14 @@ class TestAPIRequestLog(TestCase):
         self.assertEqual(log.errors, 'dummy')
 
     def test_queries_anon(self):
-        for i in range(100):
+        for _ in range(100):
             APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now())
 
         with self.assertNumQueries(1):
             [o.user for o in APIRequestLog.objects.all()]
 
     def test_queries_user(self):
-        for i in range(100):
+        for _ in range(100):
             APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(), user=self.user)
 
         with self.assertNumQueries(1):
