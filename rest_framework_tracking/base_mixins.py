@@ -13,18 +13,20 @@ logger = logging.getLogger(__name__)
 class BaseLoggingMixin(object):
     """Mixin to log requests"""
 
-    CLEANED_SUBSTITUTE = '********************'
+    CLEANED_SUBSTITUTE = "********************"
 
-    logging_methods = '__all__'
+    logging_methods = "__all__"
     sensitive_fields = {}
 
     def __init__(self, *args, **kwargs):
-        assert isinstance(self.CLEANED_SUBSTITUTE, str), 'CLEANED_SUBSTITUTE must be a string.'
+        assert isinstance(
+            self.CLEANED_SUBSTITUTE, str
+        ), "CLEANED_SUBSTITUTE must be a string."
         super(BaseLoggingMixin, self).__init__(*args, **kwargs)
 
     def initial(self, request, *args, **kwargs):
-        self.log = {'requested_at': now()}
-        self.log['data'] = self._clean_data(request.body)
+        self.log = {"requested_at": now()}
+        self.log["data"] = self._clean_data(request.body)
 
         super(BaseLoggingMixin, self).initial(request, *args, **kwargs)
 
@@ -36,25 +38,27 @@ class BaseLoggingMixin(object):
             data = self.request.data.dict()
         except AttributeError:
             data = self.request.data
-        self.log['data'] = self._clean_data(data)
+        self.log["data"] = self._clean_data(data)
 
     def handle_exception(self, exc):
         response = super(BaseLoggingMixin, self).handle_exception(exc)
-        self.log['errors'] = traceback.format_exc()
+        self.log["errors"] = traceback.format_exc()
 
         return response
 
     def finalize_response(self, request, response, *args, **kwargs):
-        response = super(BaseLoggingMixin, self).finalize_response(request, response, *args, **kwargs)
+        response = super(BaseLoggingMixin, self).finalize_response(
+            request, response, *args, **kwargs
+        )
 
         # Ensure backward compatibility for those using _should_log hook
-        should_log = self._should_log if hasattr(self, '_should_log') else self.should_log
+        should_log = (
+            self._should_log if hasattr(self, "_should_log") else self.should_log
+        )
 
         if should_log(request, response):
             if (
-                connection.settings_dict.get('ATOMIC_REQUESTS')
-                and getattr(response, 'exception', None)
-                and connection.in_atomic_block
+                connection.settings_dict.get("ATOMIC_REQUESTS") and getattr(response, "exception", None) and connection.in_atomic_block
             ):
                 # response with exception (HTTP status like: 401, 404, etc)
                 # pointwise disable atomic block for handle log (TransactionManagementError)
@@ -62,36 +66,37 @@ class BaseLoggingMixin(object):
                 connection.set_rollback(False)
             if response.streaming:
                 rendered_content = None
-            elif hasattr(response, 'rendered_content'):
+            elif hasattr(response, "rendered_content"):
                 rendered_content = response.rendered_content
             else:
                 rendered_content = response.getvalue()
 
             self.log.update(
                 {
-                    'remote_addr': self._get_ip_address(request),
-                    'view': self._get_view_name(request),
-                    'view_method': self._get_view_method(request),
-                    'path': request.path,
-                    'host': request.get_host(),
-                    'method': request.method,
-                    'query_params': self._clean_data(request.query_params.dict()),
-                    'user': self._get_user(request),
-                    'username_persistent':
-                        self._get_user(request).get_username() if self._get_user(request) else 'Anonymous',
-                    'response_ms': self._get_response_ms(),
-                    'response': self._clean_data(rendered_content),
-                    'status_code': response.status_code,
+                    "remote_addr": self._get_ip_address(request),
+                    "view": self._get_view_name(request),
+                    "view_method": self._get_view_method(request),
+                    "path": request.path,
+                    "host": request.get_host(),
+                    "method": request.method,
+                    "query_params": self._clean_data(request.query_params.dict()),
+                    "user": self._get_user(request),
+                    "username_persistent": self._get_user(request).get_username()
+                    if self._get_user(request)
+                    else "Anonymous",
+                    "response_ms": self._get_response_ms(),
+                    "response": self._clean_data(rendered_content),
+                    "status_code": response.status_code,
                 }
             )
             if self._clean_data(request.query_params.dict()) == {}:
-                self.log.update({'query_params': self.log['data']})
+                self.log.update({"query_params": self.log["data"]})
             try:
                 self.handle_log()
             except Exception:
                 # ensure that all exceptions raised by handle_log
                 # doesn't prevent API call to continue as expected
-                logger.exception('Logging API call raise exception!')
+                logger.exception("Logging API call raise exception!")
 
         return response
 
@@ -117,7 +122,7 @@ class BaseLoggingMixin(object):
         # <ipv4 address>:port
         # [<ipv6 address>]:port
         # Note that ipv6 addresses are colon separated hex numbers
-        possibles = (ipaddr.lstrip('[').split(']')[0], ipaddr.split(':')[0])
+        possibles = (ipaddr.lstrip("[").split("]")[0], ipaddr.split(":")[0])
 
         for addr in possibles:
             try:
@@ -133,9 +138,7 @@ class BaseLoggingMixin(object):
         try:
             attributes = getattr(self, method)
             return (
-                type(attributes.__self__).__module__
-                + '.'
-                + type(attributes.__self__).__name__
+                type(attributes.__self__).__module__ + "." + type(attributes.__self__).__name__
             )
 
         except AttributeError:
@@ -143,7 +146,7 @@ class BaseLoggingMixin(object):
 
     def _get_view_method(self, request):
         """Get view method."""
-        if hasattr(self, 'action'):
+        if hasattr(self, "action"):
             return self.action if self.action else None
         return request.method.lower()
 
@@ -159,7 +162,7 @@ class BaseLoggingMixin(object):
         Get the duration of the request response cycle is milliseconds.
         In case of negative duration 0 is returned.
         """
-        response_timedelta = now() - self.log['requested_at']
+        response_timedelta = now() - self.log["requested_at"]
         response_ms = int(response_timedelta.total_seconds() * 1000)
         return max(response_ms, 0)
 
@@ -168,7 +171,9 @@ class BaseLoggingMixin(object):
         Method that should return a value that evaluated to True if the request should be logged.
         By default, check if the request method is in logging_methods.
         """
-        return self.logging_methods == '__all__' or request.method in self.logging_methods
+        return (
+            self.logging_methods == "__all__" or request.method in self.logging_methods
+        )
 
     def _clean_data(self, data):
         """
@@ -183,16 +188,25 @@ class BaseLoggingMixin(object):
         eg: sensitive_fields = {'field1', 'field2'}
         """
         if isinstance(data, bytes):
-            data = data.decode(errors='replace')
+            data = data.decode(errors="replace")
 
         if isinstance(data, list):
             return [self._clean_data(d) for d in data]
         if isinstance(data, dict):
-            SENSITIVE_FIELDS = {'api', 'token', 'key', 'secret', 'password', 'signature'}
+            SENSITIVE_FIELDS = {
+                "api",
+                "token",
+                "key",
+                "secret",
+                "password",
+                "signature",
+            }
 
             data = dict(data)
             if self.sensitive_fields:
-                SENSITIVE_FIELDS = SENSITIVE_FIELDS | {field.lower() for field in self.sensitive_fields}
+                SENSITIVE_FIELDS = SENSITIVE_FIELDS | {
+                    field.lower() for field in self.sensitive_fields
+                }
 
             for key, value in data.items():
                 try:
