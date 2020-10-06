@@ -183,6 +183,18 @@ You can also use the excellent [tox](http://tox.readthedocs.org/en/latest/) test
 ``` bash
 $ tox
 ```
+you can also use pyenv to install multiple versions of python and ensure they are found by tox by issuing:
+``` bash
+pyenv install 3.8.4
+pyenv install 3.7.7
+pyenv install 3.6.11
+pyenv local 3.8.4 3.7.7 3.6.11
+pyenv global 3.8.4 3.7.7 3.6.11
+```
+Also ensure that you don't have a virtualenv activated when you run the tests else you might get the following error, or similar: 
+`
+ERROR: InterpreterNotFound: python3.6
+`
 
 ## Documentation
 
