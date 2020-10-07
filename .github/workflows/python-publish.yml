@@ -4,8 +4,11 @@
 name: Upload Python Package
 
 on:
-  release:
-    types: [created]
+#  release:
+#    types: [created]
+  push:
+    tags:
+      - '*'
 
 jobs:
   deploy:
@@ -25,7 +28,7 @@ jobs:
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
       run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+        python setup.py sdist 
+        twine upload dist/* -r pypi
