@@ -19,6 +19,7 @@ tox = "*"
 mock = "*"
 django = ">=3.0.7"
 six = ">=1.13.0"
+geoip2 = ""
 
 [requires]
 python_version = ">=3.7"

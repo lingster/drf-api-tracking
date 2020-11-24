@@ -5,9 +5,17 @@ import traceback
 
 from django.db import connection
 from django.utils.timezone import now
+from django.contrib.gis.geoip2 import GeoIP2
+from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
+
+# create an instance of GeoIP2 if GEOIP_PATH was set in settings.py
+if hasattr(settings, 'GEOIP_PATH'):
+    geo_location = GeoIP2()
+else:
+    geo_location = None
 
 
 class BaseLoggingMixin(object):
@@ -70,10 +78,12 @@ class BaseLoggingMixin(object):
                 rendered_content = response.rendered_content
             else:
                 rendered_content = response.getvalue()
+            
+            ip_address = self._get_ip_address(request)
 
             self.log.update(
                 {
-                    "remote_addr": self._get_ip_address(request),
+                    "remote_addr": ip_address,
                     "view": self._get_view_name(request),
                     "view_method": self._get_view_method(request),
                     "path": request.path,
@@ -91,6 +101,15 @@ class BaseLoggingMixin(object):
             )
             if self._clean_data(request.query_params.dict()) == {}:
                 self.log.update({"query_params": self.log["data"]})
+            
+            # update request city and country
+            if geo_location:
+                try:
+                    geo_location_data = geo_location.city(ip_address)
+                    self.log.update({"request_city": geo_location_data["city"], "request_country": geo_location_data["country_name"]})
+                except Exception:
+                    pass
+
             try:
                 self.handle_log()
             except Exception:
