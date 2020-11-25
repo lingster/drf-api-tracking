@@ -24,7 +24,7 @@ class Command(BaseCommand):
             logs_to_delete = APIRequestLog.objects.filter(requested_at__lt=start_date)
 
         else:
-            logs_to_delete = APIRequestLog.objects.all().delete()
+            logs_to_delete = APIRequestLog.objects.all()
         
         deleted_logs_count = logs_to_delete.count()
         logs_to_delete.delete()
