@@ -12,7 +12,7 @@ class Command(BaseCommand):
             '--days_num',
             help='Keep X number of days of logs and delete the rest',
             type=int,
-            choices=[x + 1 for x in range(7)],
+            choices=[x + 1 for x in range(100000)],
         )
 
     def handle(self, *args, **options):
