@@ -14,7 +14,6 @@ class APIRequestLogAdmin(admin.ModelAdmin):
                     'user', 'method',
                     'path', 'remote_addr', 'host',
                     'query_params')
-    ordering = ("-requested_at",)
     list_filter = ('method', 'status_code')
     search_fields = ('path', 'user__email',)
     raw_id_fields = ('user', )
