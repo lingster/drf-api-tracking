@@ -61,9 +61,9 @@
             },
         });
 
-        function onDateChange(start, end) {
-            var formattedStart = start.format('YYYY-MM-D');
-            var formattedEnd = end.format('YYYY-MM-D');
+        function onDateChange(newStart, newEnd) {
+            var formattedStart = newStart.format('YYYY-MM-D');
+            var formattedEnd = newEnd.format('YYYY-MM-D');
 
             const res = fetch("/admin/rest_framework_tracking/apirequestlog/chart_data/?start_date=" + formattedStart + "&end_date=" + formattedEnd)
                 .then(resp => resp.json())
@@ -76,11 +76,11 @@
                     chart.update();
                 })
 
-            formatDateRangeInput()
+            formatDateRangeInput(newStart, newEnd)
         }
 
-        function formatDateRangeInput() {
-            document.querySelector('#daterangepicker span').innerHTML = start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY');
+        function formatDateRangeInput(newStart, newEnd) {
+            document.querySelector('#daterangepicker span').innerHTML = newStart.format('MMMM D, YYYY') + ' - ' + newEnd.format('MMMM D, YYYY');
         }
 
         var start = chartData.length ? moment(chartData[chartData.length - 1].x) : moment();
@@ -101,7 +101,7 @@
             }
         }, onDateChange);
 
-        formatDateRangeInput();
+        formatDateRangeInput(start, end);
     });
 </script>
 
