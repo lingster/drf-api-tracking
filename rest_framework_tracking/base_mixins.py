@@ -80,6 +80,11 @@ class BaseLoggingMixin(object):
                 rendered_content = response.getvalue()
             
             ip_address = self._get_ip_address(request)
+            
+            # update request city and country
+            request_location_dict = {}
+            if geo_location:
+                request_location_dict = self._get_request_location(ip_address)
 
             self.log.update(
                 {
@@ -97,14 +102,12 @@ class BaseLoggingMixin(object):
                     "response_ms": self._get_response_ms(),
                     "response": self._clean_data(rendered_content),
                     "status_code": response.status_code,
+                    **request_location_dict
                 }
             )
             if self._clean_data(request.query_params.dict()) == {}:
                 self.log.update({"query_params": self.log["data"]})
             
-            # update request city and country
-            if geo_location:
-                self._log_request_location(ip_address)
 
             try:
                 self.handle_log()
@@ -181,20 +184,18 @@ class BaseLoggingMixin(object):
         response_ms = int(response_timedelta.total_seconds() * 1000)
         return max(response_ms, 0)
 
-    def _log_request_location(self, ip_address):
+    def _get_request_location(self, ip_address):
         try:
             geo_location_data = geo_location.city(ip_address)
             request_city = geo_location_data["city"]
             request_country = geo_location_data["country_name"]
 
-            self.log.update(
-                {
-                    "request_city": request_city, 
-                    "request_country": request_country,
-                }
-            )
+            return {
+                "request_city": request_city, 
+                "request_country": request_country,
+            }
         except Exception:
-            pass
+            return {}
 
     def should_log(self, request, response):
         """
