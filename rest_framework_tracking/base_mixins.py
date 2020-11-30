@@ -5,6 +5,7 @@ import traceback
 
 from django.db import connection
 from django.utils.timezone import now
+from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,7 @@ class BaseLoggingMixin(object):
                     "remote_addr": self._get_ip_address(request),
                     "view": self._get_view_name(request),
                     "view_method": self._get_view_method(request),
-                    "path": request.path,
+                    "path": self._get_path(request),
                     "host": request.get_host(),
                     "method": request.method,
                     "query_params": self._clean_data(request.query_params.dict()),
@@ -107,6 +108,12 @@ class BaseLoggingMixin(object):
         Defaults on saving the data on the db.
         """
         raise NotImplementedError
+
+    def _get_path(self, request):
+        """Get the request path and truncate it"""
+        path_max_length = getattr(settings, 'DRF_TRACKING_PATH_LENGTH', 200)
+
+        return request.path[:path_max_length]
 
     def _get_ip_address(self, request):
         """Get the remote ip address the request was generated from. """
