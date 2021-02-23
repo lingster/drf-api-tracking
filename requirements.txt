@@ -2,6 +2,7 @@
 Django>=1.11
 djangorestframework>=3.5
 six>=1.14.0
+geoip2>=4.1.0
 
 # Test requirements
 pytest-django

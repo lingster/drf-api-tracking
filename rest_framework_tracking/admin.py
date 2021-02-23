@@ -22,7 +22,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
     if getattr(settings, 'DRF_TRACKING_ADMIN_LOG_READONLY', False):
         readonly_fields = ('user', 'username_persistent', 'requested_at',
                            'response_ms', 'path', 'view', 'view_method',
-                           'remote_addr', 'host', 'method', 'query_params',
+                           'remote_addr', 'request_city', 'request_country', 'host', 'method', 'query_params',
                            'data', 'response', 'errors', 'status_code')
 
     def changelist_view(self, request, extra_context=None):

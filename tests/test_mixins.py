@@ -484,3 +484,19 @@ class TestLoggingMixin(APITestCase):
         self.client.get('/custom-log-handler')
         self.client.post('/custom-log-handler')
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
+
+    def test_log_request_city(self):
+        request = APIRequestFactory().get('/logging')
+        request.META['REMOTE_ADDR'] = '127.0.0.9'
+
+        MockLoggingView.as_view()(request).render()
+        log = APIRequestLog.objects.first()
+        self.assertEqual(log.request_city, None)
+    
+    def test_log_request_country(self):
+        request = APIRequestFactory().get('/logging')
+        request.META['REMOTE_ADDR'] = '127.0.0.9'
+
+        MockLoggingView.as_view()(request).render()
+        log = APIRequestLog.objects.first()
+        self.assertEqual(log.request_country, None)
