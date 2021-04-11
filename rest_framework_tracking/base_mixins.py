@@ -154,7 +154,7 @@ class BaseLoggingMixin(object):
     def _get_view_method(self, request):
         """Get view method."""
         if hasattr(self, "action"):
-            return self.action if self.action else None
+            return self.action or None
         return request.method.lower()
 
     def _get_user(self, request):
@@ -221,7 +221,7 @@ class BaseLoggingMixin(object):
                     value = ast.literal_eval(value)
                 except (ValueError, SyntaxError):
                     pass
-                if isinstance(value, list) or isinstance(value, dict):
+                if isinstance(value, (list, dict)):
                     data[key] = self._clean_data(value)
                 if key.lower() in SENSITIVE_FIELDS:
                     data[key] = self.CLEANED_SUBSTITUTE
