@@ -1,10 +1,12 @@
-from django.conf import settings
+import datetime
+
 from django.contrib import admin
 from django.db.models import Count
 from django.db.models.functions import TruncDay
 from django.urls import path
 from django.http import JsonResponse
-import datetime
+
+from .app_settings import app_settings
 from .models import APIRequestLog
 
 
@@ -19,7 +21,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
     search_fields = ('path', 'user__email',)
     raw_id_fields = ('user', )
 
-    if getattr(settings, 'DRF_TRACKING_ADMIN_LOG_READONLY', False):
+    if app_settings.ADMIN_LOG_READONLY:
         readonly_fields = ('user', 'username_persistent', 'requested_at',
                            'response_ms', 'path', 'view', 'view_method',
                            'remote_addr', 'host', 'method', 'query_params',
@@ -38,7 +40,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
 
         # Call the superclass changelist_view to render the page
         return super().changelist_view(request, extra_context=extra_context)
-    
+
     def get_urls(self):
         urls = super().get_urls()
         extra_urls = [
