@@ -484,3 +484,9 @@ class TestLoggingMixin(APITestCase):
         self.client.get('/custom-log-handler')
         self.client.post('/custom-log-handler')
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
+
+    @override_settings(DATA_UPLOAD_MAX_MEMORY_SIZE=1)
+    def test_decode_request_body_setting(self):
+        content_type = "multipart/form-data; boundary=_"
+        response = self.client.post('/decode-request-body-false', {"data": "some test data"}, content_type=content_type)
+        self.assertEqual(response.status_code, 200)
