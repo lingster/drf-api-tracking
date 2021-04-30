@@ -5,18 +5,18 @@ verify_ssl = true
 
 [dev-packages]
 tox-pyenv = "*"
+flaky = "*"
+flake8 = "*"
+pytest = ">=3.6"
+pytest-cov = ">=2.6"
+coveralls = "*"
+tox = "*"
+mock = "*"
 
 [packages]
 djangorestframework = ">=3.5"
 pytest-django = "*"
 django-environ = "*"
-pytest = ">=3.6"
-pytest-cov = ">=2.6"
-coveralls = "*"
-flaky = "*"
-flake8 = "*"
-tox = "*"
-mock = "*"
 django = ">=3.1.8"
 six = ">=1.13.0"
 
