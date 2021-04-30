@@ -17,8 +17,8 @@ flaky = "*"
 flake8 = "*"
 tox = "*"
 mock = "*"
-django = ">=3.0.7"
+django = ">=3.1.8"
 six = ">=1.13.0"
 
 [requires]
-python_version = ">=3.7"
+python_version = "3.8"
