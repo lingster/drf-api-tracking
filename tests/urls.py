@@ -40,5 +40,6 @@ urlpatterns = [
     re_path(r'^no-view-log$', test_views.MockNameAPIView.as_view()),
     re_path(r'^view-log$', test_views.MockNameViewSet.as_view({'get': 'list'})),
     re_path(r'^400-body-parse-error-logging$', test_views.Mock400BodyParseErrorLoggingView.as_view()),
+    re_path(r'^decode-request-body-false$', test_views.MockDecodeRequestBodyFalse.as_view()),
     re_path(r'', include(router.urls))
 ]
