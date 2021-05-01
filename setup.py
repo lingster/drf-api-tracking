@@ -77,7 +77,7 @@ with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name=name,
-    version=version,
+    version=os.environ.get('PACKAGE_VERSION', version),
     url=url,
     license=license,
     description=description,
