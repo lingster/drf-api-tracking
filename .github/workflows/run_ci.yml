@@ -29,6 +29,6 @@ jobs:
     - name: Test with runtests.py
       run: |
         python runtests.py
-    - name: Test with tox
-      run: |
-        tox -v
+    #- name: Test with tox
+      #run: |
+        #tox -v
