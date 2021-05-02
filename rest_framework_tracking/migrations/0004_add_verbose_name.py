@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rest_framework_tracking', '0003_add_errors'),
+        ("rest_framework_tracking", "0003_add_errors"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='apirequestlog',
-            options={'verbose_name': 'API Request Log'},
+            name="apirequestlog",
+            options={"verbose_name": "API Request Log"},
         ),
     ]

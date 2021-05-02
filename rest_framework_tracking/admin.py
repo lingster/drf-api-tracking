@@ -11,21 +11,45 @@ from .models import APIRequestLog
 
 
 class APIRequestLogAdmin(admin.ModelAdmin):
-    date_hierarchy = 'requested_at'
-    list_display = ('id', 'requested_at', 'response_ms', 'status_code',
-                    'user', 'view_method',
-                    'path', 'remote_addr', 'host',
-                    'query_params')
+    date_hierarchy = "requested_at"
+    list_display = (
+        "id",
+        "requested_at",
+        "response_ms",
+        "status_code",
+        "user",
+        "view_method",
+        "path",
+        "remote_addr",
+        "host",
+        "query_params",
+    )
     ordering = ("-requested_at",)
-    list_filter = ('view_method', 'status_code')
-    search_fields = ('path', 'user__email',)
-    raw_id_fields = ('user', )
+    list_filter = ("view_method", "status_code")
+    search_fields = (
+        "path",
+        "user__email",
+    )
+    raw_id_fields = ("user",)
 
     if app_settings.ADMIN_LOG_READONLY:
-        readonly_fields = ('user', 'username_persistent', 'requested_at',
-                           'response_ms', 'path', 'view', 'view_method',
-                           'remote_addr', 'host', 'method', 'query_params',
-                           'data', 'response', 'errors', 'status_code')
+        readonly_fields = (
+            "user",
+            "username_persistent",
+            "requested_at",
+            "response_ms",
+            "path",
+            "view",
+            "view_method",
+            "remote_addr",
+            "host",
+            "method",
+            "query_params",
+            "data",
+            "response",
+            "errors",
+            "status_code",
+        )
 
     def changelist_view(self, request, extra_context=None):
         # Aggregate api logs per day
@@ -51,24 +75,26 @@ class APIRequestLogAdmin(admin.ModelAdmin):
     # JSON endpoint for generating chart data that is used for dynamic loading
     # via JS.
     def chart_data_endpoint(self, request):
-        start_date = request.GET.get('start_date')
-        end_date = request.GET.get('end_date')
+        start_date = request.GET.get("start_date")
+        end_date = request.GET.get("end_date")
 
         # convert start_date and end_date to datetime objects
-        start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
-        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d').date()
+        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
 
         chart_data = self.chart_data(start_date, end_date)
         return JsonResponse(list(chart_data), safe=False)
 
     def chart_data(self, start_date, end_date):
         return (
-            APIRequestLog.objects
-            .filter(requested_at__date__gte=start_date, requested_at__date__lte=end_date)
+            APIRequestLog.objects.filter(
+                requested_at__date__gte=start_date, requested_at__date__lte=end_date
+            )
             .annotate(date=TruncDay("requested_at"))
             .values("date")
             .annotate(y=Count("id"))
             .order_by("-date")
         )
+
 
 admin.site.register(APIRequestLog, APIRequestLogAdmin)

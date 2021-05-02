@@ -12,8 +12,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            'APIRequestLog',
-            'errors',
+            "APIRequestLog",
+            "errors",
             models.TextField(null=True, blank=True),
         ),
     ]

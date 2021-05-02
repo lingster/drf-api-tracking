@@ -5,7 +5,8 @@ from .managers import PrefetchUserManager
 
 
 class BaseAPIRequestLog(models.Model):
-    """ Logs Django rest framework API requests """
+    """Logs Django rest framework API requests"""
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -13,25 +14,26 @@ class BaseAPIRequestLog(models.Model):
         blank=True,
     )
     username_persistent = models.CharField(
-        max_length=getattr(settings, 'DRF_TRACKING_USERNAME_LENGTH', 200),
+        max_length=getattr(settings, "DRF_TRACKING_USERNAME_LENGTH", 200),
         null=True,
         blank=True,
     )
     requested_at = models.DateTimeField(db_index=True)
     response_ms = models.PositiveIntegerField(default=0)
     path = models.CharField(
-        max_length=getattr(settings, 'DRF_TRACKING_PATH_LENGTH', 200),
-        db_index=True, help_text='url path',
+        max_length=getattr(settings, "DRF_TRACKING_PATH_LENGTH", 200),
+        db_index=True,
+        help_text="url path",
     )
     view = models.CharField(
-        max_length=getattr(settings, 'DRF_TRACKING_VIEW_LENGTH', 200),
+        max_length=getattr(settings, "DRF_TRACKING_VIEW_LENGTH", 200),
         null=True,
         blank=True,
         db_index=True,
-        help_text='method called by this endpoint',
+        help_text="method called by this endpoint",
     )
     view_method = models.CharField(
-        max_length=getattr(settings, 'DRF_TRACKING_VIEW_METHOD_LENGTH', 200),
+        max_length=getattr(settings, "DRF_TRACKING_VIEW_METHOD_LENGTH", 200),
         null=True,
         blank=True,
         db_index=True,
@@ -48,7 +50,7 @@ class BaseAPIRequestLog(models.Model):
 
     class Meta:
         abstract = True
-        verbose_name = 'API Request Log'
+        verbose_name = "API Request Log"
 
     def __str__(self):
-        return '{} {}'.format(self.method, self.path)
+        return "{} {}".format(self.method, self.path)
