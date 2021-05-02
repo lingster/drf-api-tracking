@@ -33,8 +33,8 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.tagName.outputs.tag }}
         # TWINE_REPOSITORY: pypitest
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        TWINE_USERNAME: $(( secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
         # TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
       run: |
         python setup.py sdist 
