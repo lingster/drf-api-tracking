@@ -147,6 +147,14 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
             super(MockCustomLogHandlerView, self).handle_log()
 ```
 
+If your endpoint accepts large file uploads, drf-api-tracking's default behavior to decode the request body may cause a `RequestDataTooBig` exception. This behavior can be disabled globally by setting `DRF_TRACKING_DECODE_REQUEST_BODY = FALSE` in your `settings.py`file.
+
+You can also customize this behavior for individual views by setting the `decode_request_body` attribute:
+
+``` python
+class LoggingView(LoggingMixin, generics.GenericAPIView):
+    decode_request_body = False
+```
 
 ## Security
 
@@ -164,7 +172,7 @@ By default drf-tracking allows API request log entries to be modified from Djang
 
 ## Development
 In the folder there is a sample drf project: `drf_api_sample` if changes are made to this packages models, use this project
-to help generate new migrations, which should be checked in. 
+to help generate new migrations, which should be checked in.
 
 ## Testing
 
@@ -193,7 +201,7 @@ pyenv install 3.6.11
 pyenv local 3.8.4 3.7.7 3.6.11
 pyenv global 3.8.4 3.7.7 3.6.11
 ```
-Also ensure that you don't have a virtualenv activated when you run the tests else you might get the following error, or similar: 
+Also ensure that you don't have a virtualenv activated when you run the tests else you might get the following error, or similar:
 `
 ERROR: InterpreterNotFound: python3.6
 `
@@ -241,4 +249,3 @@ using pyenv you can install multiple versions of python so that tox can run test
 pyenv global 3.6.8 3.7.7 3.8.2
 ```
 ensure that before running tox you don't have a virtualenv created and tox has been installed globally or via pipx
-

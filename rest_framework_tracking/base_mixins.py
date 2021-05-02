@@ -9,6 +9,8 @@ from django.contrib.gis.geoip2 import GeoIP2
 from django.conf import settings
 
 
+from .app_settings import app_settings
+
 logger = logging.getLogger(__name__)
 
 # create an instance of GeoIP2 if GEOIP_PATH was set in settings.py
@@ -31,7 +33,10 @@ class BaseLoggingMixin(object):
 
     def initial(self, request, *args, **kwargs):
         self.log = {"requested_at": now()}
-        self.log["data"] = self._clean_data(request.body)
+        if not getattr(self, "decode_request_body", app_settings.DECODE_REQUEST_BODY):
+            self.log["data"] = ''
+        else:
+            self.log["data"] = self._clean_data(request.body)
 
         super(BaseLoggingMixin, self).initial(request, *args, **kwargs)
 
@@ -112,7 +117,6 @@ class BaseLoggingMixin(object):
                 # ensure that all exceptions raised by handle_log
                 # doesn't prevent API call to continue as expected
                 logger.exception("Logging API call raise exception!")
-
         return response
 
     def handle_log(self):
@@ -125,9 +129,7 @@ class BaseLoggingMixin(object):
 
     def _get_path(self, request):
         """Get the request path and truncate it"""
-        path_max_length = getattr(settings, 'DRF_TRACKING_PATH_LENGTH', 200)
-
-        return request.path[:path_max_length]
+        return request.path[:app_settings.PATH_LENGTH]
 
     def _get_ip_address(self, request):
         """Get the remote ip address the request was generated from. """
@@ -226,6 +228,7 @@ class BaseLoggingMixin(object):
 
         if isinstance(data, list):
             return [self._clean_data(d) for d in data]
+
         if isinstance(data, dict):
             SENSITIVE_FIELDS = {
                 "api",

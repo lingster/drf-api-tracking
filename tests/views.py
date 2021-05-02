@@ -1,16 +1,18 @@
+import time
+
+from rest_framework import mixins, serializers, status, viewsets
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.exceptions import APIException
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_tracking.mixins import LoggingErrorsMixin, LoggingMixin
+from rest_framework_tracking.models import APIRequestLog
+from rest_framework.views import APIView
+from tests.test_serializers import ApiRequestLogSerializer, UserSerializer
+
 from django.contrib.auth.models import User
 from django.http.response import StreamingHttpResponse
 from django.shortcuts import get_list_or_404
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import serializers, viewsets, mixins
-from rest_framework.exceptions import APIException
-from rest_framework_tracking.mixins import LoggingErrorsMixin, LoggingMixin
-from rest_framework_tracking.models import APIRequestLog
-from tests.test_serializers import ApiRequestLogSerializer, UserSerializer
-import time
 
 
 class MockNoLoggingView(APIView):
@@ -234,3 +236,10 @@ class MockCustomLogHandlerView(LoggingMixin, APIView):
     def post(self, request):
         time.sleep(1)
         return Response('Slow request. Save it on db.')
+
+
+class MockDecodeRequestBodyFalse(LoggingMixin, APIView):
+    decode_request_body = False
+
+    def post(self, request):
+        return Response({"decode_request_body": False}, status=status.HTTP_200_OK)
