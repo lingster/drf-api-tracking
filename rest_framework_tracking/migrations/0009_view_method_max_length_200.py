@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rest_framework_tracking', '0008_auto_20200201_2048'),
+        ("rest_framework_tracking", "0008_auto_20200201_2048"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='apirequestlog',
-            name='view_method',
-            field=models.CharField(blank=True, db_index=True, max_length=200, null=True),
+            model_name="apirequestlog",
+            name="view_method",
+            field=models.CharField(
+                blank=True, db_index=True, max_length=200, null=True
+            ),
         ),
     ]

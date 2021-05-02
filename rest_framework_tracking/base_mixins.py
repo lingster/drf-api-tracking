@@ -28,7 +28,7 @@ class BaseLoggingMixin(object):
     def initial(self, request, *args, **kwargs):
         self.log = {"requested_at": now()}
         if not getattr(self, "decode_request_body", app_settings.DECODE_REQUEST_BODY):
-            self.log["data"] = ''
+            self.log["data"] = ""
         else:
             self.log["data"] = self._clean_data(request.body)
 
@@ -61,9 +61,7 @@ class BaseLoggingMixin(object):
         )
 
         if should_log(request, response):
-            if (
-                connection.settings_dict.get("ATOMIC_REQUESTS") and getattr(response, "exception", None) and connection.in_atomic_block
-            ):
+            if (connection.settings_dict.get("ATOMIC_REQUESTS") and getattr(response, "exception", None) and connection.in_atomic_block):
                 # response with exception (HTTP status like: 401, 404, etc)
                 # pointwise disable atomic block for handle log (TransactionManagementError)
                 connection.set_rollback(True)
@@ -113,10 +111,10 @@ class BaseLoggingMixin(object):
 
     def _get_path(self, request):
         """Get the request path and truncate it"""
-        return request.path[:app_settings.PATH_LENGTH]
+        return request.path[: app_settings.PATH_LENGTH]
 
     def _get_ip_address(self, request):
-        """Get the remote ip address the request was generated from. """
+        """Get the remote ip address the request was generated from."""
         ipaddr = request.META.get("HTTP_X_FORWARDED_FOR", None)
         if ipaddr:
             ipaddr = ipaddr.split(",")[0]
@@ -154,7 +152,7 @@ class BaseLoggingMixin(object):
     def _get_view_method(self, request):
         """Get view method."""
         if hasattr(self, "action"):
-            return self.action if self.action else None
+            return self.action or None
         return request.method.lower()
 
     def _get_user(self, request):
@@ -221,7 +219,7 @@ class BaseLoggingMixin(object):
                     value = ast.literal_eval(value)
                 except (ValueError, SyntaxError):
                     pass
-                if isinstance(value, list) or isinstance(value, dict):
+                if isinstance(value, (list, dict)):
                     data[key] = self._clean_data(value)
                 if key.lower() in SENSITIVE_FIELDS:
                     data[key] = self.CLEANED_SUBSTITUTE

@@ -10,13 +10,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rest_framework_tracking', '0005_auto_20171219_1537'),
+        ("rest_framework_tracking", "0005_auto_20171219_1537"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='apirequestlog',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            model_name="apirequestlog",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
