@@ -20,6 +20,8 @@ drf-api-tracking provides a Django model and DRF view mixin that work together t
 `view` | Target VIEW of the request, e.g., `"views.api.ApiView"` | CharField
 `view_method` | Target METHOD of the VIEW of the request, e.g., `"get"` | CharField
 `remote_addr` | IP address where the request originated (X_FORWARDED_FOR if available, REMOTE_ADDR if not), e.g., `"127.0.0.1"` | GenericIPAddressField
+`request_city` | City where the reuqest originated | CharField
+`request_country` | Country where the reuqest originated | CharField
 `host` | Originating host of the request, e.g., `"example.com"` | URLField
 `method` | HTTP method, e.g., `"GET"` | CharField
 `query_params` | Dictionary of request query parameters, as text | TextField

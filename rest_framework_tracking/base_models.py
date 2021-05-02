@@ -37,6 +37,8 @@ class BaseAPIRequestLog(models.Model):
         db_index=True,
     )
     remote_addr = models.GenericIPAddressField()
+    request_city = models.CharField(max_length=255, null=True, blank=True)
+    request_country = models.CharField(max_length=255, null=True, blank=True)
     host = models.URLField()
     method = models.CharField(max_length=10)
     query_params = models.TextField(null=True, blank=True)
