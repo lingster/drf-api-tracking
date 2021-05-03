@@ -1,0 +1,35 @@
+version: 2
+jobs: 
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Pipfile" }}
+            - v1-dependencies-
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv 
+            . venv/bin/activate
+            pipenv install --skip-lock --dev
+            pip install tox 
+
+      - save_cache:
+          paths:
+            - ./venv 
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            tox -v
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
