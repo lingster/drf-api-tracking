@@ -119,7 +119,7 @@ class BaseLoggingMixin(object):
         if ipaddr:
             ipaddr = ipaddr.split(",")[0]
         else:
-            ipaddr = request.META.get("REMOTE_ADDR", "")
+            ipaddr = request.META.get("REMOTE_ADDR", "").split(",")[0]
 
         # Account for IPv4 and IPv6 addresses, each possibly with port appended. Possibilities are:
         # <ipv4 address>
