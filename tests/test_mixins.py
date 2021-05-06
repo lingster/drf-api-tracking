@@ -50,6 +50,14 @@ class TestLoggingMixin(APITestCase):
         log = APIRequestLog.objects.first()
         self.assertEqual(log.remote_addr, '127.0.0.9')
 
+    def test_log_ip_remote_list(self):
+        request = APIRequestFactory().get('/logging')
+        request.META['REMOTE_ADDR'] = '127.0.0.9, 128.1.1.9'
+
+        MockLoggingView.as_view()(request).render()
+        log = APIRequestLog.objects.first()
+        self.assertEqual(log.remote_addr, '127.0.0.9')
+
     def test_log_ip_remote_v4_with_port(self):
         request = APIRequestFactory().get('/logging')
         request.META['REMOTE_ADDR'] = '127.0.0.9:1234'
