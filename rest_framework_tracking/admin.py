@@ -30,7 +30,6 @@ class APIRequestLogAdmin(admin.ModelAdmin):
         "path",
         "user",
     )
-    raw_id_fields = ("user",)
 
     if app_settings.ADMIN_LOG_READONLY:
         readonly_fields = (
