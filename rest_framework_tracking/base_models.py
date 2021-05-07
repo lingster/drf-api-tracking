@@ -7,7 +7,7 @@ from .managers import PrefetchUserManager
 class BaseAPIRequestLog(models.Model):
     """Logs Django rest framework API requests"""
 
-    user = models.PositiveIntegerField(null=True)
+    user = models.IntegerField(null=True)
     username_persistent = models.CharField(
         max_length=getattr(settings, "DRF_TRACKING_USERNAME_LENGTH", 200),
         null=True,
