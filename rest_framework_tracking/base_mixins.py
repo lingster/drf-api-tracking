@@ -83,9 +83,7 @@ class BaseLoggingMixin(object):
                     "method": request.method,
                     "query_params": self._clean_data(request.query_params.dict()),
                     "user": self._get_user(request),
-                    "username_persistent": self._get_user(request).get_username()
-                    if self._get_user(request)
-                    else "Anonymous",
+                    "username_persistent": self._get_username(request),
                     "response_ms": self._get_response_ms(),
                     "response": self._clean_data(rendered_content),
                     "status_code": response.status_code,
@@ -157,10 +155,15 @@ class BaseLoggingMixin(object):
 
     def _get_user(self, request):
         """Get user."""
-        user = request.user
-        if user.is_anonymous:
+        if request.user.is_anonymous:
             return None
-        return user
+        return request.user.id
+    
+    def _get_username(self, request):
+        """Get username."""
+        if request.user.is_anonymous:
+            return "Anonymous"
+        return request.user.username
 
     def _get_response_ms(self):
         """
