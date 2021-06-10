@@ -27,5 +27,10 @@ class AppSettings(object):
         """Maximum length of request path to log"""
         return self._setting("PATH_LENGTH", 200)
 
+    @property
+    def LOOKUP_FIELD(self):
+        """Field to identify user in User model"""
+        return self._setting("LOOKUP_FIELD", 'email')
+
 
 app_settings = AppSettings("DRF_TRACKING_")
