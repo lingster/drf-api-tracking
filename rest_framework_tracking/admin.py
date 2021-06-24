@@ -28,7 +28,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
     list_filter = ("view_method", "status_code")
     search_fields = (
         "path",
-        "user__email",
+        f"user__{app_settings.LOOKUP_FIELD}",
     )
     raw_id_fields = ("user",)
 
