@@ -73,6 +73,8 @@ class BaseLoggingMixin(object):
             else:
                 rendered_content = response.getvalue()
 
+            user = self._get_user(request)
+                
             self.log.update(
                 {
                     "remote_addr": self._get_ip_address(request),
@@ -82,10 +84,8 @@ class BaseLoggingMixin(object):
                     "host": request.get_host(),
                     "method": request.method,
                     "query_params": self._clean_data(request.query_params.dict()),
-                    "user": self._get_user(request),
-                    "username_persistent": self._get_user(request).get_username()
-                    if self._get_user(request)
-                    else "Anonymous",
+                    "user": user,
+                    "username_persistent": user.get_username() if user else "Anonymous",
                     "response_ms": self._get_response_ms(),
                     "response": self._clean_data(rendered_content),
                     "status_code": response.status_code,
