@@ -1,8 +1,10 @@
+from datetime import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils.timezone import now, timedelta
 from rest_framework_tracking.models import APIRequestLog
 import pytest
+from unittest.mock import patch
 
 
 pytestmark = pytest.mark.django_db
@@ -106,3 +108,10 @@ class TestAPIRequestLog(TestCase):
     def test_without_remote_addr(self):
         log = APIRequestLog.objects.create(requested_at=now(), user=self.user)
         self.assertIsNone(log.remote_addr)
+
+    def test_without_requested_at(self):
+        FAKE_NOW = datetime(2021, 9, 30, 9, 0, 0)
+        field = APIRequestLog._meta.get_field('requested_at')
+        with patch.object(field, 'default', new=lambda: FAKE_NOW):
+            log = APIRequestLog.objects.create(remote_addr=self.ip, user=self.user)
+        self.assertEqual(log.requested_at, FAKE_NOW)
