@@ -102,3 +102,7 @@ class TestAPIRequestLog(TestCase):
 
         with self.assertNumQueries(1):
             [o.user for o in APIRequestLog.objects.all()]
+
+    def test_without_remote_addr(self):
+        log = APIRequestLog.objects.create(requested_at=now(), user=self.user)
+        self.assertIsNone(log.remote_addr)
