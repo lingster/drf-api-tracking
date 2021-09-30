@@ -74,7 +74,7 @@ class BaseLoggingMixin(object):
                 rendered_content = response.getvalue()
 
             user = self._get_user(request)
-                
+
             self.log.update(
                 {
                     "remote_addr": self._get_ip_address(request),
