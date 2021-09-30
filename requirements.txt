@@ -12,6 +12,7 @@ coveralls
 flaky
 flake8
 tox
+drf-yasg>=1.20
 
 # wheel for PyPI installs
 wheel
