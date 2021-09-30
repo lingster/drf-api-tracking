@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.conf import settings
 
@@ -18,7 +19,7 @@ class BaseAPIRequestLog(models.Model):
         null=True,
         blank=True,
     )
-    requested_at = models.DateTimeField(db_index=True)
+    requested_at = models.DateTimeField(default=datetime.now, db_index=True)
     response_ms = models.PositiveIntegerField(default=0)
     path = models.CharField(
         max_length=getattr(settings, "DRF_TRACKING_PATH_LENGTH", 200),
@@ -38,7 +39,7 @@ class BaseAPIRequestLog(models.Model):
         blank=True,
         db_index=True,
     )
-    remote_addr = models.GenericIPAddressField()
+    remote_addr = models.GenericIPAddressField(null=True, blank=True)
     host = models.URLField()
     method = models.CharField(max_length=10)
     query_params = models.TextField(null=True, blank=True)
