@@ -18,6 +18,7 @@ class BaseLoggingMixin(object):
 
     logging_methods = "__all__"
     sensitive_fields = {}
+    delete_log_days_period = None
 
     def __init__(self, *args, **kwargs):
         assert isinstance(
@@ -27,10 +28,13 @@ class BaseLoggingMixin(object):
 
     def initial(self, request, *args, **kwargs):
         self.log = {"requested_at": now()}
-        if not getattr(self, "decode_request_body", app_settings.DECODE_REQUEST_BODY):
-            self.log["data"] = ""
-        else:
-            self.log["data"] = self._clean_data(request.body)
+        self.log["data"] = (
+            self._clean_data(request.body)
+            if getattr(
+                self, "decode_request_body", app_settings.DECODE_REQUEST_BODY
+            )
+            else ""
+        )
 
         super(BaseLoggingMixin, self).initial(request, *args, **kwargs)
 
@@ -143,8 +147,10 @@ class BaseLoggingMixin(object):
         try:
             attributes = getattr(self, method)
             return (
-                type(attributes.__self__).__module__ + "." + type(attributes.__self__).__name__
+                f'{type(attributes.__self__).__module__}.'
+                + type(attributes.__self__).__name__
             )
+
 
         except AttributeError:
             return None
