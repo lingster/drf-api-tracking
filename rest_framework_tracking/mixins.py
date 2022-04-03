@@ -9,6 +9,11 @@ class LoggingMixin(BaseLoggingMixin):
 
         Defaults on saving the data on the db.
         """
+        if self.delete_log_days_period is not None:
+            from django.utils import timezone
+            now = timezone.make_aware(datetime.datetime.now(), timezone.get_default_timezone())
+            delete_before_date_time = now - datetime.timedelta(days=self.delete_log_days_period)
+            APIRequestLog.objects.filter(view=self.log['view'], requested_at__lt=delete_before_date_time).delete()
         APIRequestLog(**self.log).save()
 
 
