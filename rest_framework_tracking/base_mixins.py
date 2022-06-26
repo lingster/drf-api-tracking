@@ -74,7 +74,7 @@ class BaseLoggingMixin(object):
                 rendered_content = response.getvalue()
 
             user = self._get_user(request)
-                
+
             self.log.update(
                 {
                     "remote_addr": self._get_ip_address(request),
@@ -82,6 +82,7 @@ class BaseLoggingMixin(object):
                     "view_method": self._get_view_method(request),
                     "path": self._get_path(request),
                     "host": request.get_host(),
+                    "user_agent": request.META.get("HTTP_USER_AGENT", ""),
                     "method": request.method,
                     "query_params": self._clean_data(request.query_params.dict()),
                     "user": user,
