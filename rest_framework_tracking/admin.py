@@ -49,6 +49,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
             "response",
             "errors",
             "status_code",
+            "user_agent"
         )
 
     def changelist_view(self, request, extra_context=None):

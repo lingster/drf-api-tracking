@@ -41,6 +41,7 @@ class BaseAPIRequestLog(models.Model):
     remote_addr = models.GenericIPAddressField()
     host = models.URLField()
     method = models.CharField(max_length=10)
+    user_agent = models.CharField(max_length=255, blank=True)
     query_params = models.TextField(null=True, blank=True)
     data = models.TextField(null=True, blank=True)
     response = models.TextField(null=True, blank=True)
@@ -53,4 +54,4 @@ class BaseAPIRequestLog(models.Model):
         verbose_name = "API Request Log"
 
     def __str__(self):
-        return "{} {}".format(self.method, self.path)
+        return f"{self.method} {self.path}"

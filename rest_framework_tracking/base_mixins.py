@@ -27,10 +27,13 @@ class BaseLoggingMixin(object):
 
     def initial(self, request, *args, **kwargs):
         self.log = {"requested_at": now()}
-        if not getattr(self, "decode_request_body", app_settings.DECODE_REQUEST_BODY):
-            self.log["data"] = ""
-        else:
-            self.log["data"] = self._clean_data(request.body)
+        self.log["data"] = (
+            self._clean_data(request.body)
+            if getattr(
+                self, "decode_request_body", app_settings.DECODE_REQUEST_BODY
+            )
+            else ""
+        )
 
         super(BaseLoggingMixin, self).initial(request, *args, **kwargs)
 
@@ -74,7 +77,7 @@ class BaseLoggingMixin(object):
                 rendered_content = response.getvalue()
 
             user = self._get_user(request)
-                
+
             self.log.update(
                 {
                     "remote_addr": self._get_ip_address(request),
@@ -82,6 +85,7 @@ class BaseLoggingMixin(object):
                     "view_method": self._get_view_method(request),
                     "path": self._get_path(request),
                     "host": request.get_host(),
+                    "user_agent": request.META.get("HTTP_USER_AGENT", ""),
                     "method": request.method,
                     "query_params": self._clean_data(request.query_params.dict()),
                     "user": user,
@@ -142,9 +146,8 @@ class BaseLoggingMixin(object):
         method = request.method.lower()
         try:
             attributes = getattr(self, method)
-            return (
-                type(attributes.__self__).__module__ + "." + type(attributes.__self__).__name__
-            )
+            return f"{type(attributes.__self__).__module__}.{type(attributes.__self__).__name__}"
+
 
         except AttributeError:
             return None
