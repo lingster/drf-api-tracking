@@ -12,6 +12,7 @@ pytest-cov = ">=2.6"
 coveralls = "*"
 tox = "*"
 mock = "*"
+twine = "*"
 
 [packages]
 djangorestframework = ">=3.5"
