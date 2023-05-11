@@ -145,7 +145,7 @@ class LoggingView(LoggingMixin, generics.GenericAPIView):
             super(MockCustomLogHandlerView, self).handle_log()
 ```
 
-If your endpoint accepts large file uploads, drf-api-tracking's default behavior to decode the request body may cause a `RequestDataTooBig` exception. This behavior can be disabled globally by setting `DRF_TRACKING_DECODE_REQUEST_BODY = FALSE` in your `settings.py`file.
+If your endpoint accepts large file uploads, drf-api-tracking's default behavior to decode the request body may cause a `RequestDataTooBig` exception. This behavior can be disabled globally by setting `DRF_TRACKING_DECODE_REQUEST_BODY = False` in your `settings.py`file.
 
 You can also customize this behavior for individual views by setting the `decode_request_body` attribute:
 
