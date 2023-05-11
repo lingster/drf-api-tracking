@@ -204,6 +204,21 @@ Also ensure that you don't have a virtualenv activated when you run the tests el
 ERROR: InterpreterNotFound: python3.6
 `
 
+## Contributing
+
+In order to make changes to the package itself, providing migrations or something else,
+make sure to install the current package with pip, otherwise using the `drf_api_sample` won't work.
+
+``` bash
+pip install -e .
+```
+
+After this, you can edit models and creating migrations with
+
+``` bash
+python drf_api_sample/manage.py makemigrations
+```
+
 ## Documentation
 
 To build the documentation, you'll need to install `mkdocs`.
