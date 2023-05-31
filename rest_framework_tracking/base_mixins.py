@@ -18,6 +18,7 @@ class BaseLoggingMixin(object):
 
     logging_methods = "__all__"
     sensitive_fields = {}
+    delete_log_days_period = None
 
     def __init__(self, *args, **kwargs):
         assert isinstance(self.CLEANED_SUBSTITUTE, str), "CLEANED_SUBSTITUTE must be a string."
