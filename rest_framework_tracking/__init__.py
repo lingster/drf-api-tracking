@@ -1,4 +1,4 @@
-__version__ = "1.8.2"
+__version__ = "1.8.4"
 import django
 
 if django.VERSION < (3, 2):
