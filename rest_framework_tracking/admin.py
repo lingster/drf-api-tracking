@@ -49,7 +49,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
             "response",
             "errors",
             "status_code",
-            "user_agent"
+            "user_agent",
         )
 
     def changelist_view(self, request, extra_context=None):
@@ -68,9 +68,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super().get_urls()
-        extra_urls = [
-            path("chart_data/", self.admin_site.admin_view(self.chart_data_endpoint))
-        ]
+        extra_urls = [path("chart_data/", self.admin_site.admin_view(self.chart_data_endpoint))]
         return extra_urls + urls
 
     # JSON endpoint for generating chart data that is used for dynamic loading
@@ -88,9 +86,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
 
     def chart_data(self, start_date, end_date):
         return (
-            APIRequestLog.objects.filter(
-                requested_at__date__gte=start_date, requested_at__date__lte=end_date
-            )
+            APIRequestLog.objects.filter(requested_at__date__gte=start_date, requested_at__date__lte=end_date)
             .annotate(date=TruncDay("requested_at"))
             .values("date")
             .annotate(y=Count("id"))

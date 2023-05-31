@@ -13,6 +13,8 @@ coveralls = "*"
 tox = "*"
 mock = "*"
 twine = "*"
+ruff = "*"
+pre-commit = "*"
 
 [packages]
 djangorestframework = ">=3.5"

@@ -26,104 +26,103 @@ from .views import MockLoggingView
 pytestmark = pytest.mark.django_db
 
 
-@override_settings(ROOT_URLCONF='tests.urls')
+@override_settings(ROOT_URLCONF="tests.urls")
 class TestLoggingMixin(APITestCase):
-
     def test_nologging_no_log_created(self):
-        self.client.get('/no-logging')
+        self.client.get("/no-logging")
         self.assertEqual(APIRequestLog.objects.all().count(), 0)
 
     def test_logging_creates_log(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
 
     def test_log_path(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.path, '/logging')
+        self.assertEqual(log.path, "/logging")
 
     def test_log_ip_remote(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['REMOTE_ADDR'] = '127.0.0.9'
+        request = APIRequestFactory().get("/logging")
+        request.META["REMOTE_ADDR"] = "127.0.0.9"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '127.0.0.9')
+        self.assertEqual(log.remote_addr, "127.0.0.9")
 
     def test_log_ip_remote_list(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['REMOTE_ADDR'] = '127.0.0.9, 128.1.1.9'
+        request = APIRequestFactory().get("/logging")
+        request.META["REMOTE_ADDR"] = "127.0.0.9, 128.1.1.9"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '127.0.0.9')
+        self.assertEqual(log.remote_addr, "127.0.0.9")
 
     def test_log_ip_remote_v4_with_port(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['REMOTE_ADDR'] = '127.0.0.9:1234'
+        request = APIRequestFactory().get("/logging")
+        request.META["REMOTE_ADDR"] = "127.0.0.9:1234"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '127.0.0.9')
+        self.assertEqual(log.remote_addr, "127.0.0.9")
 
     def test_log_ip_remote_v6(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['REMOTE_ADDR'] = '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+        request = APIRequestFactory().get("/logging")
+        request.META["REMOTE_ADDR"] = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '2001:db8:85a3::8a2e:370:7334')
+        self.assertEqual(log.remote_addr, "2001:db8:85a3::8a2e:370:7334")
 
     def test_log_ip_remote_v6_loopback(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['REMOTE_ADDR'] = '::1'
+        request = APIRequestFactory().get("/logging")
+        request.META["REMOTE_ADDR"] = "::1"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '::1')
+        self.assertEqual(log.remote_addr, "::1")
 
     def test_log_ip_remote_v6_with_port(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['REMOTE_ADDR'] = '[::1]:1234'
+        request = APIRequestFactory().get("/logging")
+        request.META["REMOTE_ADDR"] = "[::1]:1234"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '::1')
+        self.assertEqual(log.remote_addr, "::1")
 
     def test_log_ip_xforwarded(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['HTTP_X_FORWARDED_FOR'] = '127.0.0.8'
+        request = APIRequestFactory().get("/logging")
+        request.META["HTTP_X_FORWARDED_FOR"] = "127.0.0.8"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '127.0.0.8')
+        self.assertEqual(log.remote_addr, "127.0.0.8")
 
     def test_log_ip_xforwarded_list(self):
-        request = APIRequestFactory().get('/logging')
-        request.META['HTTP_X_FORWARDED_FOR'] = '127.0.0.8, 128.1.1.9'
+        request = APIRequestFactory().get("/logging")
+        request.META["HTTP_X_FORWARDED_FOR"] = "127.0.0.8, 128.1.1.9"
 
         MockLoggingView.as_view()(request).render()
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.remote_addr, '127.0.0.8')
+        self.assertEqual(log.remote_addr, "127.0.0.8")
 
     def test_log_host(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.host, 'testserver')
+        self.assertEqual(log.host, "testserver")
 
     def test_log_method(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.method, 'GET')
+        self.assertEqual(log.method, "GET")
 
     def test_log_status(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.status_code, 200)
 
     @flaky
     def test_log_time_fast(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
 
         # response time is very short
@@ -135,7 +134,7 @@ class TestLoggingMixin(APITestCase):
         self.assertAlmostEqual(threshold, saved_delay, 2)
 
     def test_log_time_slow(self):
-        self.client.get('/slow-logging')
+        self.client.get("/slow-logging")
         log = APIRequestLog.objects.first()
 
         # response time is longer than 1000 milliseconds
@@ -145,50 +144,50 @@ class TestLoggingMixin(APITestCase):
         self.assertGreaterEqual((now() - log.requested_at).total_seconds(), 1)
 
     def test_logging_explicit(self):
-        self.client.get('/explicit-logging')
-        self.client.post('/explicit-logging')
+        self.client.get("/explicit-logging")
+        self.client.post("/explicit-logging")
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
 
     def test_custom_check_logging(self):
-        self.client.get('/custom-check-logging')
-        self.client.post('/custom-check-logging')
+        self.client.get("/custom-check-logging")
+        self.client.post("/custom-check-logging")
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
 
     def test_custom_check_logging_deprecated(self):
-        self.client.get('/custom-check-logging-deprecated')
-        self.client.post('/custom-check-logging-deprecated')
+        self.client.get("/custom-check-logging-deprecated")
+        self.client.post("/custom-check-logging-deprecated")
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
 
     def test_custom_check_logging_with_logging_methods_fail(self):
         """Custom `should_log` does not respect logging_methods."""
-        self.client.get('/custom-check-logging-methods-fail')
-        self.client.post('/custom-check-logging-methods-fail')
+        self.client.get("/custom-check-logging-methods-fail")
+        self.client.post("/custom-check-logging-methods-fail")
         self.assertEqual(APIRequestLog.objects.all().count(), 2)
 
     def test_custom_check_logging_with_logging_methods(self):
         """Custom `should_log` respect logging_methods."""
-        self.client.get('/custom-check-logging-methods')
-        self.client.post('/custom-check-logging-methods')
+        self.client.get("/custom-check-logging-methods")
+        self.client.post("/custom-check-logging-methods")
         self.assertEqual(APIRequestLog.objects.all().count(), 0)
 
     def test_errors_logging(self):
-        self.client.get('/errors-logging')
-        self.client.post('/errors-logging')
+        self.client.get("/errors-logging")
+        self.client.post("/errors-logging")
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
 
     def test_log_anon_user(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.user, None)
 
     def test_log_auth_user(self):
         # set up active user
-        User.objects.create_user(username='myname', password='secret')
-        user = User.objects.get(username='myname')
+        User.objects.create_user(username="myname", password="secret")
+        user = User.objects.get(username="myname")
 
         # set up request with auth
-        self.client.login(username='myname', password='secret')
-        self.client.get('/session-auth-logging')
+        self.client.login(username="myname", password="secret")
+        self.client.get("/session-auth-logging")
 
         # test
         log = APIRequestLog.objects.first()
@@ -196,15 +195,14 @@ class TestLoggingMixin(APITestCase):
 
     def test_log_auth_inactive_user(self):
         # set up inactive user with token
-        user = User.objects.create_user(username='myname', password='secret')
+        user = User.objects.create_user(username="myname", password="secret")
         token = Token.objects.create(user=user)
-        token_header = 'Token %s' % token.key
+        token_header = "Token %s" % token.key
         user.is_active = False
         user.save()
 
         # force login because regular client.login doesn't work for inactive users
-        self.client.get('/token-auth-logging',
-                        HTTP_AUTHORIZATION=token_header)
+        self.client.get("/token-auth-logging", HTTP_AUTHORIZATION=token_header)
 
         # test
         log = APIRequestLog.objects.first()
@@ -214,7 +212,7 @@ class TestLoggingMixin(APITestCase):
     def test_log_unauth_fails(self):
         # set up request without auth
         self.client.logout()
-        response = self.client.get('/session-auth-logging')
+        response = self.client.get("/session-auth-logging")
 
         # test
         log = APIRequestLog.objects.first()
@@ -222,279 +220,309 @@ class TestLoggingMixin(APITestCase):
         self.assertEqual(json.loads(log.response), response.json())
 
     def test_log_params(self):
-        self.client.get('/logging', {'p1': 'a', 'another': '2'})
+        self.client.get("/logging", {"p1": "a", "another": "2"})
         log = APIRequestLog.objects.first()
-        self.assertEqual(ast.literal_eval(log.query_params), {u'p1': u'a', u'another': u'2'})
+        self.assertEqual(ast.literal_eval(log.query_params), {"p1": "a", "another": "2"})
 
     def test_log_params_cleaned(self):
-        self.client.get('/logging', {'password': '1234', 'key': '12345', 'secret': '123456'})
+        self.client.get("/logging", {"password": "1234", "key": "12345", "secret": "123456"})
         log = APIRequestLog.objects.first()
-        self.assertEqual(ast.literal_eval(log.query_params), {
-            u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-            u'key': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-            u'secret': BaseLoggingMixin.CLEANED_SUBSTITUTE})
+        self.assertEqual(
+            ast.literal_eval(log.query_params),
+            {
+                "password": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                "key": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                "secret": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+            },
+        )
 
     def test_log_data_empty(self):
         """Default payload is string {}"""
-        self.client.post('/logging')
+        self.client.post("/logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.data, str({}))
 
     def test_log_data_json(self):
-        self.client.post('/logging', {'val': 1, 'val2': [{'a': 'b'}]}, format='json')
+        self.client.post("/logging", {"val": 1, "val2": [{"a": "b"}]}, format="json")
         log = APIRequestLog.objects.first()
-        expected_data = frozenset({  # keys could be either way round
-            str({u'val': 1, u'val2': [{u'a': u'b'}]}),
-            str({u'val2': [{u'a': u'b'}], u'val': 1}),
-        })
+        expected_data = frozenset(
+            {  # keys could be either way round
+                str({"val": 1, "val2": [{"a": "b"}]}),
+                str({"val2": [{"a": "b"}], "val": 1}),
+            }
+        )
         self.assertIn(log.data, expected_data)
 
     def test_log_list_data_json(self):
-        self.client.post('/logging', [1, 2, {'k1': 1, 'k2': 2}, {'k3': 3}], format='json')
+        self.client.post("/logging", [1, 2, {"k1": 1, "k2": 2}, {"k3": 3}], format="json")
 
         log = APIRequestLog.objects.first()
-        expected_data = str([
-            1, 2, {u'k1': 1, u'k2': 2}, {u'k3': 3},
-        ])
+        expected_data = str(
+            [
+                1,
+                2,
+                {"k1": 1, "k2": 2},
+                {"k3": 3},
+            ]
+        )
         self.assertEqual(log.data, expected_data)
 
     def test_log_data_json_cleaned(self):
-        self.client.post('/logging', {'password': '123456', 'val2': [{'val': 'b'}]},
-                         format='json')
+        self.client.post("/logging", {"password": "123456", "val2": [{"val": "b"}]}, format="json")
         log = APIRequestLog.objects.first()
-        expected_data = frozenset({  # keys could be either way round
-            str({u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-                 u'val2': [{u'val': u'b'}]}),
-            str({u'val2': [{u'val': u'b'}],
-                 u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE}),
-        })
+        expected_data = frozenset(
+            {  # keys could be either way round
+                str({"password": BaseLoggingMixin.CLEANED_SUBSTITUTE, "val2": [{"val": "b"}]}),
+                str({"val2": [{"val": "b"}], "password": BaseLoggingMixin.CLEANED_SUBSTITUTE}),
+            }
+        )
         self.assertIn(log.data, expected_data)
 
     def test_log_data_json_cleaned_nested(self):
-        self.client.post('/logging', {'password': '123456', 'val2': [{'api': 'b'}]},
-                         format='json')
+        self.client.post("/logging", {"password": "123456", "val2": [{"api": "b"}]}, format="json")
         log = APIRequestLog.objects.first()
-        expected_data = frozenset({  # keys could be either way round
-            str({u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-                 u'val2': [{u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE}]}),
-            str({u'val2': [{u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE}],
-                 u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE}),
-        })
+        expected_data = frozenset(
+            {  # keys could be either way round
+                str(
+                    {
+                        "password": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                        "val2": [{"api": BaseLoggingMixin.CLEANED_SUBSTITUTE}],
+                    }
+                ),
+                str(
+                    {
+                        "val2": [{"api": BaseLoggingMixin.CLEANED_SUBSTITUTE}],
+                        "password": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                    }
+                ),
+            }
+        )
         self.assertIn(log.data, expected_data)
 
     def test_log_data_json_cleaned_nested_syntax_error(self):
-        self.client.post('/logging', {'password': '@', 'val2': [{'api': 'b'}]},
-                         format='json')
+        self.client.post("/logging", {"password": "@", "val2": [{"api": "b"}]}, format="json")
         log = APIRequestLog.objects.first()
-        expected_data = frozenset({  # keys could be either way round
-            str({u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-                 u'val2': [{u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE}]}),
-            str({u'val2': [{u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE}],
-                 u'password': BaseLoggingMixin.CLEANED_SUBSTITUTE}),
-        })
+        expected_data = frozenset(
+            {  # keys could be either way round
+                str(
+                    {
+                        "password": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                        "val2": [{"api": BaseLoggingMixin.CLEANED_SUBSTITUTE}],
+                    }
+                ),
+                str(
+                    {
+                        "val2": [{"api": BaseLoggingMixin.CLEANED_SUBSTITUTE}],
+                        "password": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                    }
+                ),
+            }
+        )
         self.assertIn(log.data, expected_data)
 
     def test_log_exact_match_params_cleaned(self):
-        self.client.get('/logging', {'api': '1234', 'capitalized': '12345', 'keyword': '123456'})
+        self.client.get("/logging", {"api": "1234", "capitalized": "12345", "keyword": "123456"})
         log = APIRequestLog.objects.first()
-        self.assertEqual(ast.literal_eval(log.query_params), {
-            u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-            u'capitalized': '12345',
-            u'keyword': '123456'})
+        self.assertEqual(
+            ast.literal_eval(log.query_params),
+            {"api": BaseLoggingMixin.CLEANED_SUBSTITUTE, "capitalized": "12345", "keyword": "123456"},
+        )
 
     def test_log_with_exception(self):
-        self.client.get('/logging-exception', {'api': '1234', 'capitalized': '12345', 'keyword': '123456'})
+        self.client.get("/logging-exception", {"api": "1234", "capitalized": "12345", "keyword": "123456"})
         log = APIRequestLog.objects.first()
-        self.assertEqual(ast.literal_eval(log.query_params), {
-            u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-            u'capitalized': '12345',
-            u'keyword': '123456'})
+        self.assertEqual(
+            ast.literal_eval(log.query_params),
+            {"api": BaseLoggingMixin.CLEANED_SUBSTITUTE, "capitalized": "12345", "keyword": "123456"},
+        )
 
     def test_log_params_cleaned_from_personal_list(self):
-        self.client.get('/sensitive-fields-logging',
-                        {'api': '1234', 'capitalized': '12345', 'my_field': '123456'})
+        self.client.get("/sensitive-fields-logging", {"api": "1234", "capitalized": "12345", "my_field": "123456"})
         log = APIRequestLog.objects.first()
-        self.assertEqual(ast.literal_eval(log.query_params), {
-            u'api': BaseLoggingMixin.CLEANED_SUBSTITUTE,
-            u'capitalized': '12345',
-            u'my_field': BaseLoggingMixin.CLEANED_SUBSTITUTE})
+        self.assertEqual(
+            ast.literal_eval(log.query_params),
+            {
+                "api": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+                "capitalized": "12345",
+                "my_field": BaseLoggingMixin.CLEANED_SUBSTITUTE,
+            },
+        )
 
     def test_invalid_cleaned_substitute_fails(self):
         with self.assertRaises(AssertionError):
-            self.client.get('/invalid-cleaned-substitute-logging')
+            self.client.get("/invalid-cleaned-substitute-logging")
 
     def test_log_text_response(self):
-        self.client.get('/logging')
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.response, u'"with logging"')
+        self.assertEqual(log.response, '"with logging"')
 
     def test_log_json_get_response(self):
-        self.client.get('/json-logging')
+        self.client.get("/json-logging")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.response, u'{"get":"response"}')
+        self.assertEqual(log.response, '{"get":"response"}')
 
     def test_log_json_post_response(self):
-        self.client.post('/json-logging', {}, format='json')
+        self.client.post("/json-logging", {}, format="json")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.response, u'{"post":"response"}')
+        self.assertEqual(log.response, '{"post":"response"}')
 
     def test_log_multipart_post_response(self):
-        self.client.post('/multipart-logging', {}, format='multipart')
+        self.client.post("/multipart-logging", {}, format="multipart")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.response, u'{"post":"response"}')
+        self.assertEqual(log.response, '{"post":"response"}')
 
     def test_log_multipart_utf8_encoded_file_post_response(self):
-        file = BytesIO('test data'.encode('utf-8'))
-        self.client.post('/multipart-logging', {'file': file}, format='multipart')
+        file = BytesIO("test data".encode("utf-8"))
+        self.client.post("/multipart-logging", {"file": file}, format="multipart")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.response, u'{"post":"response"}')
+        self.assertEqual(log.response, '{"post":"response"}')
 
     def test_log_multipart_utf16_encoded_file_post_response(self):
-        file = BytesIO('test data'.encode('utf-16'))
-        self.client.post('/multipart-logging', {'file': file}, format='multipart')
+        file = BytesIO("test data".encode("utf-16"))
+        self.client.post("/multipart-logging", {"file": file}, format="multipart")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.response, u'{"post":"response"}')
+        self.assertEqual(log.response, '{"post":"response"}')
 
     def test_log_streaming(self):
-        response = self.client.get('/streaming-logging')
-        self.assertEqual(response.getvalue(), b'ab')  # iterator was not consumed by logging
+        response = self.client.get("/streaming-logging")
+        self.assertEqual(response.getvalue(), b"ab")  # iterator was not consumed by logging
         log = APIRequestLog.objects.first()
         self.assertIs(log.response, None)
 
     def test_log_status_validation_error(self):
-        self.client.get('/validation-error-logging')
+        self.client.get("/validation-error-logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.status_code, 400)
-        self.assertEqual(log.response, u'["bad input"]')
+        self.assertEqual(log.response, '["bad input"]')
 
     def test_log_request_404_error(self):
-        self.client.get('/404-error-logging')
+        self.client.get("/404-error-logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.status_code, 404)
-        self.assertIn('Not found', log.response)
-        self.assertIn('Traceback', log.errors)
+        self.assertIn("Not found", log.response)
+        self.assertIn("Traceback", log.errors)
 
     def test_log_request_500_error(self):
-        self.client.get('/500-error-logging')
+        self.client.get("/500-error-logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.status_code, 500)
-        self.assertIn('response', log.response)
-        self.assertIn('Traceback', log.errors)
+        self.assertIn("response", log.response)
+        self.assertIn("Traceback", log.errors)
 
     def test_log_request_415_error(self):
-        content_type = 'text/plain'
-        self.client.post('/415-error-logging', {}, content_type=content_type)
+        content_type = "text/plain"
+        self.client.post("/415-error-logging", {}, content_type=content_type)
         log = APIRequestLog.objects.first()
         self.assertEqual(log.status_code, 415)
-        self.assertIn('Unsupported media type', log.response)
+        self.assertIn("Unsupported media type", log.response)
 
     def test_log_view_name_api_view(self):
-        self.client.get('/no-view-log')
+        self.client.get("/no-view-log")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.view, 'tests.views.MockNameAPIView')
+        self.assertEqual(log.view, "tests.views.MockNameAPIView")
 
     def test_no_log_view_name(self):
-        self.client.post('/view-log')
+        self.client.post("/view-log")
         log = APIRequestLog.objects.first()
         self.assertIsNone(log.view)
 
     def test_log_view_name_generic_viewset(self):
-        self.client.get('/view-log')
+        self.client.get("/view-log")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.view, 'tests.views.MockNameViewSet')
+        self.assertEqual(log.view, "tests.views.MockNameViewSet")
 
     def test_log_view_method_name_api_view(self):
-        self.client.get('/no-view-log')
+        self.client.get("/no-view-log")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.view_method, 'get')
+        self.assertEqual(log.view_method, "get")
 
     def test_no_log_view_method_name(self):
-        self.client.post('/view-log')
+        self.client.post("/view-log")
         log = APIRequestLog.objects.first()
         self.assertIsNone(log.view_method)
 
     def test_get_user(self):
-        self.client.get('/user/', {"id": 1})
+        self.client.get("/user/", {"id": 1})
         log = APIRequestLog.objects.first()
         self.assertIsNotNone(log.view_method)
-        self.assertEqual(ast.literal_eval(log.query_params), {u"id": u'1'})
+        self.assertEqual(ast.literal_eval(log.query_params), {"id": "1"})
 
     def test_delete_user(self):
-        self.client.delete('/user/1/', {"id": 1})
+        self.client.delete("/user/1/", {"id": 1})
         log = APIRequestLog.objects.first()
         self.assertEqual("destroy", log.view_method)
-        self.assertEqual(ast.literal_eval(log.query_params), {u"id": u'1'})
+        self.assertEqual(ast.literal_eval(log.query_params), {"id": "1"})
 
     def test_patch_user(self):
-        self.client.patch('/user/1/', {"username": 'fred'})
+        self.client.patch("/user/1/", {"username": "fred"})
         log = APIRequestLog.objects.first()
         self.assertEqual("partial_update", log.view_method)
-        self.assertEqual(ast.literal_eval(log.query_params), {u"username": u'fred'})
+        self.assertEqual(ast.literal_eval(log.query_params), {"username": "fred"})
 
     def test_post_user(self):
-        self.client.post('/user/',
-                         {"username": 'fred', "first_name": "fred", "last_name": "jones", "email": "test@test.com"})
+        self.client.post(
+            "/user/", {"username": "fred", "first_name": "fred", "last_name": "jones", "email": "test@test.com"}
+        )
         log = APIRequestLog.objects.first()
         self.assertEqual("create", log.view_method)
-        self.assertEqual(ast.literal_eval(log.query_params), {'email': 'test@test.com',
-                                                              'first_name': 'fred',
-                                                              'last_name': 'jones',
-                                                              'username': 'fred'})
+        self.assertEqual(
+            ast.literal_eval(log.query_params),
+            {"email": "test@test.com", "first_name": "fred", "last_name": "jones", "username": "fred"},
+        )
 
     def test_put_user(self):
-        self.client.put('/user/1/',
-                        {"pk": 1, "username": 'fred', "first_name": "fred", "last_name": "jones",
-                         "email": "test@test.com"})
+        self.client.put(
+            "/user/1/",
+            {"pk": 1, "username": "fred", "first_name": "fred", "last_name": "jones", "email": "test@test.com"},
+        )
         log = APIRequestLog.objects.first()
-        self.assertEqual('update', log.view_method)
-        self.assertEqual(ast.literal_eval(log.query_params), {'pk': '1', 'email': 'test@test.com',
-                                                              'first_name': 'fred',
-                                                              'last_name': 'jones',
-                                                              'username': 'fred'})
+        self.assertEqual("update", log.view_method)
+        self.assertEqual(
+            ast.literal_eval(log.query_params),
+            {"pk": "1", "email": "test@test.com", "first_name": "fred", "last_name": "jones", "username": "fred"},
+        )
 
     def test_get_user_not_exist(self):
-        self.client.get('/user/', {"id": 100})
+        self.client.get("/user/", {"id": 100})
         log = APIRequestLog.objects.first()
         self.assertIsNotNone(log.view_method)
-        self.assertEqual(ast.literal_eval(log.query_params), {u"id": u'100'})
+        self.assertEqual(ast.literal_eval(log.query_params), {"id": "100"})
 
     def test_log_view_method_name_generic_viewset(self):
-        self.client.get('/view-log')
+        self.client.get("/view-log")
         log = APIRequestLog.objects.first()
-        self.assertEqual(log.view_method, 'list')
+        self.assertEqual(log.view_method, "list")
 
     def test_log_request_body_parse_error(self):
-        content_type = 'application/json'
-        self.client.post('/400-body-parse-error-logging', 'INVALID JSON', content_type=content_type)
+        content_type = "application/json"
+        self.client.post("/400-body-parse-error-logging", "INVALID JSON", content_type=content_type)
         log = APIRequestLog.objects.first()
         self.assertEqual(log.status_code, 400)
-        self.assertEqual(log.data, 'INVALID JSON')
-        self.assertIn('parse error', log.response)
+        self.assertEqual(log.data, "INVALID JSON")
+        self.assertIn("parse error", log.response)
 
-    @mock.patch('rest_framework_tracking.models.APIRequestLog.save')
+    @mock.patch("rest_framework_tracking.models.APIRequestLog.save")
     def test_log_doesnt_prevent_api_call_if_log_save_fails(self, mock_apirequestlog_save):
-        mock_apirequestlog_save.side_effect = Exception('db failure')
-        response = self.client.get('/logging')
+        mock_apirequestlog_save.side_effect = Exception("db failure")
+        response = self.client.get("/logging")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(APIRequestLog.objects.all().count(), 0)
 
-    @mock.patch('rest_framework_tracking.base_mixins.now')
+    @mock.patch("rest_framework_tracking.base_mixins.now")
     def test_log_doesnt_fail_with_negative_response_ms(self, mock_now):
-        mock_now.side_effect = [
-            datetime.datetime(2017, 12, 1, 10, 0, 10),
-            datetime.datetime(2017, 12, 1, 10)
-        ]
-        self.client.get('/logging')
+        mock_now.side_effect = [datetime.datetime(2017, 12, 1, 10, 0, 10), datetime.datetime(2017, 12, 1, 10)]
+        self.client.get("/logging")
         log = APIRequestLog.objects.first()
         self.assertEqual(log.response_ms, 0)
 
     def test_custom_log_handler(self):
-        self.client.get('/custom-log-handler')
-        self.client.post('/custom-log-handler')
+        self.client.get("/custom-log-handler")
+        self.client.post("/custom-log-handler")
         self.assertEqual(APIRequestLog.objects.all().count(), 1)
 
     @override_settings(DATA_UPLOAD_MAX_MEMORY_SIZE=1)
     def test_decode_request_body_setting(self):
         content_type = "multipart/form-data; boundary=_"
-        response = self.client.post('/decode-request-body-false', {"data": "some test data"}, content_type=content_type)
+        response = self.client.post("/decode-request-body-false", {"data": "some test data"}, content_type=content_type)
         self.assertEqual(response.status_code, 200)

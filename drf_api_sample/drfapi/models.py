@@ -1,5 +1,3 @@
-from django.db import models
-
 # Create your models here.
 
 from django.contrib.auth.models import User
@@ -11,7 +9,7 @@ from rest_framework_tracking.mixins import LoggingMixin
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        fields = ["url", "username", "email", "is_staff"]
 
 
 # ViewSets define the view behavior.

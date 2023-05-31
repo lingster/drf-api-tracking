@@ -1,5 +1,5 @@
 version: 2
-jobs: 
+jobs:
   build:
     working_directory: ~/repo
     docker:
@@ -15,14 +15,14 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv 
+            python3 -m venv venv
             . venv/bin/activate
             pipenv install --skip-lock --dev
-            pip install tox 
+            pip install tox
 
       - save_cache:
           paths:
-            - ./venv 
+            - ./venv
       - run:
           name: run tests
           command: |
@@ -32,4 +32,3 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
-

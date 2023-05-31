@@ -14,4 +14,4 @@ drf-yasg = "*"
 drf-api-tracking = {editable = true,path = "./../../drf-api-tracking"}
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

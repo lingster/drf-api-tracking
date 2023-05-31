@@ -69,7 +69,7 @@
                     resp.forEach((d) => {
                         d.x = new Date(d.date);
                     });
-                
+
                     chart.data.datasets[0].data = resp;
                     chart.update();
                 })

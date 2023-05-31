@@ -17,46 +17,46 @@ from django.shortcuts import get_list_or_404
 
 class MockNoLoggingView(APIView):
     def get(self, request):
-        return Response('no logging')
+        return Response("no logging")
 
 
 class MockLoggingView(LoggingMixin, APIView):
     def get(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
     def post(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
 
 class MockLoggingExceptionView(LoggingMixin, APIView):
     def get(self, request):
-        raise Exception('mock exception')
+        raise Exception("mock exception")
 
     def post(self, request):
-        raise Exception('mock exception')
+        raise Exception("mock exception")
 
 
 class MockSlowLoggingView(LoggingMixin, APIView):
     def get(self, request):
         time.sleep(1)
-        return Response('with logging')
+        return Response("with logging")
 
 
 class MockExplicitLoggingView(LoggingMixin, APIView):
-    logging_methods = ['POST']
+    logging_methods = ["POST"]
 
     def get(self, request):
-        return Response('no logging')
+        return Response("no logging")
 
     def post(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
 
 class MockSensitiveFieldsLoggingView(LoggingMixin, APIView):
-    sensitive_fields = {'mY_fiEld'}
+    sensitive_fields = {"mY_fiEld"}
 
     def get(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
 
 class MockInvalidCleanedSubstituteLoggingView(LoggingMixin, APIView):
@@ -68,13 +68,13 @@ class MockCustomCheckLoggingViewDeprecated(LoggingMixin, APIView):
         """
         Log only if response contains 'log'
         """
-        return 'log' in response.data
+        return "log" in response.data
 
     def get(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
     def post(self, request):
-        return Response('no recording')
+        return Response("no recording")
 
 
 class MockCustomCheckLoggingView(LoggingMixin, APIView):
@@ -82,17 +82,17 @@ class MockCustomCheckLoggingView(LoggingMixin, APIView):
         """
         Log only if response contains 'log'
         """
-        return 'log' in response.data
+        return "log" in response.data
 
     def get(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
     def post(self, request):
-        return Response('no recording')
+        return Response("no recording")
 
 
 class MockCustomCheckLoggingWithLoggingMethodsView(LoggingMixin, APIView):
-    logging_methods = ['POST']
+    logging_methods = ["POST"]
 
     def should_log(self, request, response):
         """
@@ -101,13 +101,13 @@ class MockCustomCheckLoggingWithLoggingMethodsView(LoggingMixin, APIView):
         should_log_method = super(MockCustomCheckLoggingWithLoggingMethodsView, self).should_log(request, response)
         if not should_log_method:
             return False
-        return 'log' in response.data
+        return "log" in response.data
 
     def get(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
     def post(self, request):
-        return Response('no recording')
+        return Response("no recording")
 
 
 class MockCustomCheckLoggingWithLoggingMethodsFailView(LoggingMixin, APIView):
@@ -115,27 +115,27 @@ class MockCustomCheckLoggingWithLoggingMethodsFailView(LoggingMixin, APIView):
     Though, due to the improper `should_log` implementation both requests are saved.
     """
 
-    logging_methods = ['POST']
+    logging_methods = ["POST"]
 
     def should_log(self, request, response):
         """
         Log only if response contains 'log'
         """
-        return 'log' in response.data
+        return "log" in response.data
 
     def get(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
     def post(self, request):
-        return Response('with logging')
+        return Response("with logging")
 
 
 class MockLoggingErrorsView(LoggingErrorsMixin, APIView):
     def get(self, request):
-        raise APIException('with logging')
+        raise APIException("with logging")
 
     def post(self, request):
-        return Response('no logging')
+        return Response("no logging")
 
 
 class MockSessionAuthLoggingView(LoggingMixin, APIView):
@@ -143,7 +143,7 @@ class MockSessionAuthLoggingView(LoggingMixin, APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        return Response('with session auth logging')
+        return Response("with session auth logging")
 
 
 class MockTokenAuthLoggingView(LoggingMixin, APIView):
@@ -151,30 +151,30 @@ class MockTokenAuthLoggingView(LoggingMixin, APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        return Response('with token auth logging')
+        return Response("with token auth logging")
 
 
 class MockJSONLoggingView(LoggingMixin, APIView):
     def get(self, request):
-        return Response({'get': 'response'})
+        return Response({"get": "response"})
 
     def post(self, request):
-        return Response({'post': 'response'})
+        return Response({"post": "response"})
 
 
 class MockMultipartLoggingView(LoggingMixin, APIView):
     def post(self, request):
-        return Response({'post': 'response'})
+        return Response({"post": "response"})
 
 
 class MockStreamingLoggingView(LoggingMixin, APIView):
     def get(self, request):
-        return StreamingHttpResponse(iter([b'a', b'b']))
+        return StreamingHttpResponse(iter([b"a", b"b"]))
 
 
 class MockValidationErrorLoggingView(LoggingMixin, APIView):
     def get(self, request):
-        raise serializers.ValidationError('bad input')
+        raise serializers.ValidationError("bad input")
 
 
 class Mock404ErrorLoggingView(LoggingMixin, APIView):
@@ -185,7 +185,7 @@ class Mock404ErrorLoggingView(LoggingMixin, APIView):
 
 class Mock500ErrorLoggingView(LoggingMixin, APIView):
     def get(self, request):
-        raise APIException('response')
+        raise APIException("response")
 
 
 class Mock415ErrorLoggingView(LoggingMixin, APIView):
@@ -195,7 +195,7 @@ class Mock415ErrorLoggingView(LoggingMixin, APIView):
 
 class MockNameAPIView(LoggingMixin, APIView):
     def get(self, _):
-        return Response('with logging')
+        return Response("with logging")
 
 
 class MockNameViewSet(LoggingMixin, viewsets.GenericViewSet, mixins.ListModelMixin):
@@ -219,7 +219,7 @@ class Mock400BodyParseErrorLoggingView(LoggingMixin, APIView):
         # raise ParseError for request with mismatched Content-Type and body:
         # (though only if it's the first access to request.data)
         request.data
-        return Response('Data processed')
+        return Response("Data processed")
 
 
 class MockCustomLogHandlerView(LoggingMixin, APIView):
@@ -227,15 +227,15 @@ class MockCustomLogHandlerView(LoggingMixin, APIView):
         """
         Save only very slow requests. Requests that took more than 500 ms.
         """
-        if self.log['response_ms'] > 500:
+        if self.log["response_ms"] > 500:
             super(MockCustomLogHandlerView, self).handle_log()
 
     def get(self, request):
-        return Response('Fast request. No logging.')
+        return Response("Fast request. No logging.")
 
     def post(self, request):
         time.sleep(1)
-        return Response('Slow request. Save it on db.')
+        return Response("Slow request. Save it on db.")
 
 
 class MockDecodeRequestBodyFalse(LoggingMixin, APIView):

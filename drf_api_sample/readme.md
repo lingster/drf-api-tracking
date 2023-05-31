@@ -12,7 +12,7 @@ A simple playground for messing around with REST APIs and for testing drf-api-tr
 6) create admin account
 `python manage.py createsuperuser`
 
-7) drf_yasg / swagger ui has been included as part of this sample, so you can execute REST api calls via: 
+7) drf_yasg / swagger ui has been included as part of this sample, so you can execute REST api calls via:
 `python manage.py runserver localhost:8000/swagger`
 
 8) check in admin view that the log has been added after call to your REST api:
@@ -30,4 +30,3 @@ Note this is already configured in the Pipfile
 If you then make changes to the models in the drf-api-tracking library, then make sure you run:
 `python manage.py makemigrations`
 and ensure that the migrations file(s) are checked into git and PR made.
-

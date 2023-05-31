@@ -12,23 +12,22 @@ pytestmark = pytest.mark.django_db
 
 class TestAPIRequestLog(TestCase):
     def setUp(self):
-        username = 'api_user'
-        password = 'apipw'
-        self.user = User.objects.create_user(username, 'api_user@example.com', password)
-        self.ip = '127.0.0.1'
+        username = "api_user"
+        password = "apipw"
+        self.user = User.objects.create_user(username, "api_user@example.com", password)
+        self.ip = "127.0.0.1"
+        self.user_agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 
     def test_create_anon(self):
         log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now())
         self.assertIsNone(log.user)
 
     def test_create_auth(self):
-        log = APIRequestLog.objects.create(user=self.user, remote_addr=self.ip,
-                                           requested_at=now())
+        log = APIRequestLog.objects.create(user=self.user, remote_addr=self.ip, requested_at=now())
         self.assertEqual(log.user, self.user)
 
     def test_delete_user(self):
-        log = APIRequestLog.objects.create(user=self.user, remote_addr=self.ip,
-                                           requested_at=now())
+        log = APIRequestLog.objects.create(user=self.user, remote_addr=self.ip, requested_at=now())
         self.assertEqual(log.user, self.user)
         self.user.delete()
         log.refresh_from_db()
@@ -43,53 +42,48 @@ class TestAPIRequestLog(TestCase):
         self.assertGreater(log.requested_at, before)
 
     def test_path(self):
-        log = APIRequestLog.objects.create(path='/test', remote_addr=self.ip, requested_at=now())
-        self.assertEqual(log.path, '/test')
+        log = APIRequestLog.objects.create(path="/test", remote_addr=self.ip, requested_at=now())
+        self.assertEqual(log.path, "/test")
 
     def test_view(self):
-        log = APIRequestLog.objects.create(view='views.api.ApiView', remote_addr=self.ip, requested_at=now())
-        self.assertEqual(log.view, 'views.api.ApiView')
+        log = APIRequestLog.objects.create(view="views.api.ApiView", remote_addr=self.ip, requested_at=now())
+        self.assertEqual(log.view, "views.api.ApiView")
 
     def test_view_method(self):
-        log = APIRequestLog.objects.create(view_method='get', remote_addr=self.ip, requested_at=now())
-        self.assertEqual(log.view_method, 'get')
+        log = APIRequestLog.objects.create(view_method="get", remote_addr=self.ip, requested_at=now())
+        self.assertEqual(log.view_method, "get")
 
     def test_remote_addr(self):
-        log = APIRequestLog.objects.create(remote_addr='127.0.0.9', requested_at=now())
-        self.assertEqual(log.remote_addr, '127.0.0.9')
+        log = APIRequestLog.objects.create(remote_addr="127.0.0.9", requested_at=now())
+        self.assertEqual(log.remote_addr, "127.0.0.9")
 
     def test_host(self):
-        log = APIRequestLog.objects.create(remote_addr=self.ip, host='testserver', requested_at=now())
-        self.assertEqual(log.host, 'testserver')
+        log = APIRequestLog.objects.create(remote_addr=self.ip, host="testserver", requested_at=now())
+        self.assertEqual(log.host, "testserver")
 
     def test_method(self):
-        log = APIRequestLog.objects.create(remote_addr=self.ip, method='GET', requested_at=now())
-        self.assertEqual(log.method, 'GET')
+        log = APIRequestLog.objects.create(remote_addr=self.ip, method="GET", requested_at=now())
+        self.assertEqual(log.method, "GET")
 
     def test_params(self):
-        log = APIRequestLog.objects.create(remote_addr=self.ip,
-                                           query_params={'test1': 1},
-                                           requested_at=now())
-        self.assertEqual(log.query_params, {'test1': 1})
+        log = APIRequestLog.objects.create(remote_addr=self.ip, query_params={"test1": 1}, requested_at=now())
+        self.assertEqual(log.query_params, {"test1": 1})
 
     def test_default_response_ms(self):
         log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now())
         self.assertEqual(log.response_ms, 0)
 
     def test_data(self):
-        log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(),
-                                           data='test POST')
-        self.assertEqual(log.data, 'test POST')
+        log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(), data="test POST")
+        self.assertEqual(log.data, "test POST")
 
     def test_status_code(self):
-        log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(),
-                                           status_code=200)
+        log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(), status_code=200)
         self.assertEqual(log.status_code, 200)
 
     def test_errors(self):
-        log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(),
-                                           errors='dummy')
-        self.assertEqual(log.errors, 'dummy')
+        log = APIRequestLog.objects.create(remote_addr=self.ip, requested_at=now(), errors="dummy")
+        self.assertEqual(log.errors, "dummy")
 
     def test_queries_anon(self):
         for _ in range(100):
@@ -111,7 +105,7 @@ class TestAPIRequestLog(TestCase):
 
     def test_without_requested_at(self):
         FAKE_NOW = datetime(2021, 9, 30, 9, 0, 0)
-        field = APIRequestLog._meta.get_field('requested_at')
-        with patch.object(field, 'default', new=lambda: FAKE_NOW):
+        field = APIRequestLog._meta.get_field("requested_at")
+        with patch.object(field, "default", new=lambda: FAKE_NOW):
             log = APIRequestLog.objects.create(remote_addr=self.ip, user=self.user)
         self.assertEqual(log.requested_at, FAKE_NOW)

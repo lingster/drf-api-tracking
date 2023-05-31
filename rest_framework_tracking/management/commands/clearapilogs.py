@@ -30,7 +30,9 @@ class Command(BaseCommand):
         logs_to_delete.delete()
 
         if deleted_logs_count:
-            success_message = f'Successfully removed {deleted_logs_count} api log{"s" if deleted_logs_count > 1 else ""}'
+            success_message = (
+                f'Successfully removed {deleted_logs_count} api log{"s" if deleted_logs_count > 1 else ""}'
+            )
         else:
             success_message = "No logs to delete"
 
