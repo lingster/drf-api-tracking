@@ -48,6 +48,7 @@ class BaseAPIRequestLog(models.Model):
     response = models.TextField(null=True, blank=True)
     errors = models.TextField(null=True, blank=True)
     status_code = models.PositiveIntegerField(null=True, blank=True, db_index=True)
+    headers = models.JSONField(null=True, blank=True)
     objects = PrefetchUserManager()
 
     class Meta:

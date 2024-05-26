@@ -85,6 +85,7 @@ class BaseLoggingMixin(object):
                     "response_ms": self._get_response_ms(),
                     "response": self._clean_data(rendered_content),
                     "status_code": response.status_code,
+                    "headers": self._clean_data(dict(request.headers)),
                 }
             )
             if self._clean_data(request.query_params.dict()) == {}:
@@ -214,3 +215,4 @@ class BaseLoggingMixin(object):
                 if key.lower() in SENSITIVE_FIELDS:
                     data[key] = self.CLEANED_SUBSTITUTE
         return data
+

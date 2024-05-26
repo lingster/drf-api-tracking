@@ -50,6 +50,7 @@ class APIRequestLogAdmin(admin.ModelAdmin):
             "errors",
             "status_code",
             "user_agent",
+            "headers",
         )
 
     def changelist_view(self, request, extra_context=None):
@@ -95,3 +96,4 @@ class APIRequestLogAdmin(admin.ModelAdmin):
 
 
 admin.site.register(APIRequestLog, APIRequestLogAdmin)
+
